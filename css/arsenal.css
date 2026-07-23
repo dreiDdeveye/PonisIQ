@@ -1,0 +1,332 @@
+/* ===== ARSENAL ===== */
+/* Arsenal / Showcase Reel — track, cards, bg, overlay, scan, info, rank, name, stats, rarity, depth */
+
+/* (Team section removed — replaced by Arsenal) */
+
+.arsenal {
+  padding: 140px 0 120px;
+  position: relative;
+  background:
+    linear-gradient(rgba(5, 8, 7, 0.82), rgba(5, 8, 7, 0.88)),
+    url("../public/bg.image.png") center/cover no-repeat;
+  overflow: hidden;
+}
+
+.arsenal-header {
+  margin-bottom: 48px;
+  position: relative;
+  z-index: 1;
+}
+
+.arsenal-title {
+  font-family: var(--font-display);
+  font-size: clamp(26px, 3.2vw, 38px);
+  font-weight: 700;
+  letter-spacing: 3px;
+  margin-bottom: 10px;
+  color: var(--text-bright);
+  text-transform: uppercase;
+}
+
+.arsenal-subtitle {
+  font-size: 14px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  letter-spacing: 1px;
+}
+
+/* Infinite carousel track */
+.arsenal-track-wrapper {
+  overflow: hidden;
+  padding: 12px 0 36px;
+  position: relative;
+  z-index: 1;
+}
+
+.arsenal-track-wrapper::before,
+.arsenal-track-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 120px;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.arsenal-track-wrapper::before {
+  left: 0;
+  background: linear-gradient(90deg, rgba(5, 8, 7, 0.96), rgba(5, 8, 7, 0));
+}
+
+.arsenal-track-wrapper::after {
+  right: 0;
+  background: linear-gradient(270deg, rgba(5, 8, 7, 0.96), rgba(5, 8, 7, 0));
+}
+
+.arsenal-track {
+  display: flex;
+  gap: 24px;
+  width: max-content;
+  align-items: center;
+  padding: 26px 0;
+  animation: arsenalScroll 46s linear infinite;
+  will-change: transform;
+}
+
+.arsenal-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes arsenalScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Arsenal showcase card */
+.arsenal-card {
+  flex: 0 0 380px;
+  height: 480px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(8, 14, 12, 0.9);
+  backdrop-filter: blur(8px);
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.5s ease, box-shadow 0.5s ease, filter 0.5s ease;
+  clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, var(--cut) 100%, 0 calc(100% - var(--cut)));
+  will-change: transform;
+  transform: translateY(var(--stack-offset, 0px));
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.42);
+}
+
+.arsenal-card:hover {
+  border-color: var(--gold-border);
+  transform: translateY(calc(var(--stack-offset, 0px) - 12px)) scale(1.025);
+  box-shadow: 0 26px 48px rgba(0, 0, 0, 0.62), 0 0 30px var(--gold-dim);
+  filter: saturate(1.08);
+}
+
+/* Full background image/pattern */
+.arsenal-card-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), filter 0.8s ease;
+  filter: saturate(1.05) contrast(1.05);
+}
+
+.arsenal-card:hover .arsenal-card-bg {
+  transform: scale(1.1);
+  filter: saturate(1.14) contrast(1.08);
+}
+
+/* Gradient overlay for readability */
+.arsenal-card-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(180deg, rgba(5, 8, 7, 0.1) 0%, rgba(5, 8, 7, 0.24) 28%, rgba(5, 8, 7, 0.64) 68%, rgba(5, 8, 7, 0.96) 100%),
+    linear-gradient(135deg, rgba(200, 255, 0, 0.12), transparent 38%);
+  pointer-events: none;
+}
+
+.arsenal-card-grid {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mix-blend-mode: screen;
+  opacity: 0.18;
+  pointer-events: none;
+}
+
+/* HUD scan line */
+.arsenal-card-scan {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), var(--accent-cyan), transparent);
+  box-shadow: 0 0 10px var(--gold-glow);
+  z-index: 3;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.arsenal-card:hover .arsenal-card-scan {
+  opacity: 1;
+  animation: arsenalScan 1.5s 0.2s ease-in-out forwards;
+}
+
+@keyframes arsenalScan {
+  0%   { transform: translateY(0); opacity: 1; }
+  80%  { opacity: 0.8; }
+  100% { transform: translateY(480px); opacity: 0; }
+}
+
+/* Corner brackets */
+.arsenal-card::before,
+.arsenal-card::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-color: var(--gold);
+  border-style: solid;
+  z-index: 4;
+  opacity: 0.3;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.arsenal-card::before {
+  top: 10px;
+  left: 10px;
+  border-width: 1px 0 0 1px;
+}
+
+.arsenal-card::after {
+  bottom: 10px;
+  right: 10px;
+  border-width: 0 1px 1px 0;
+}
+
+.arsenal-card:hover::before,
+.arsenal-card:hover::after {
+  opacity: 0.8;
+}
+
+/* Card info at bottom */
+.arsenal-card-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.arsenal-card-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.arsenal-card-rank {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--gold);
+  text-transform: uppercase;
+  display: block;
+  text-shadow: 0 0 8px var(--gold-glow);
+}
+
+.arsenal-card-series {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.22em;
+  color: rgba(220, 232, 227, 0.5);
+  text-transform: uppercase;
+}
+
+.arsenal-card-name {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-bright);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 14px;
+}
+
+.arsenal-card-stats {
+  display: flex;
+  gap: 20px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.arsenal-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.arsenal-stat-value {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-bright);
+  letter-spacing: 1px;
+}
+
+.arsenal-stat-label {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+/* Rarity badge on card */
+.arsenal-card-rarity {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  z-index: 4;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  background: rgba(5, 8, 7, 0.72);
+  border: 1px solid rgba(200, 255, 0, 0.18);
+  backdrop-filter: blur(12px);
+}
+
+.arsenal-card[data-rarity="legendary"] .arsenal-card-rarity {
+  color: #ffd36a;
+  border-color: rgba(255, 211, 106, 0.28);
+}
+
+.arsenal-card[data-rarity="epic"] .arsenal-card-rarity {
+  color: #84d3ff;
+  border-color: rgba(132, 211, 255, 0.26);
+}
+
+.arsenal-card[data-rarity="rare"] .arsenal-card-rarity {
+  color: #c8ff00;
+  border-color: rgba(200, 255, 0, 0.24);
+}
+
+/* Parallax depth layer */
+.arsenal-card-depth {
+  position: absolute;
+  inset: -20px;
+  z-index: 0;
+  pointer-events: none;
+  transition: transform 0.4s ease-out;
+}
+
+@media (max-width: 900px) {
+  .arsenal-track-wrapper::before,
+  .arsenal-track-wrapper::after {
+    width: 60px;
+  }
+
+  .arsenal-card {
+    flex-basis: 320px;
+    height: 430px;
+  }
+}

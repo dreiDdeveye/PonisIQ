@@ -1,0 +1,2374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ponis IQ</title>
+  <meta name="description" content="Ponis IQ is an AI-powered BTC prediction dashboard with live market context, timeframe tracking, and guided analysis." />
+  <meta property="og:title" content="Ponis IQ | BTC Prediction Dashboard" />
+  <meta property="og:description" content="Live BTC prediction context, PTB tracking, volatility, win rate, and guided AI explanations." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/png" sizes="32x32" href="public/favicon.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="public/favicon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="public/favicon.png" />
+
+  <!-- Component CSS -->
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/transitions.css" />
+  <link rel="stylesheet" href="css/navbar.css" />
+  <link rel="stylesheet" href="css/hero.css" />
+  <link rel="stylesheet" href="css/about.css" />
+  <link rel="stylesheet" href="css/roadmap.css" />
+  <link rel="stylesheet" href="css/stats.css" />
+  <link rel="stylesheet" href="css/kagami.css" />
+  <link rel="stylesheet" href="css/faq.css" />
+  <link rel="stylesheet" href="css/footer.css" />
+  
+  <link rel="stylesheet" href="css/shadcn-glass.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;600;700&family=Exo+2:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ #42 Multi-TF Confluence ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ */
+    .agent-card-confluence { border-left: 3px solid #6490ff; }
+    .confluence-score-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 4px;
+      letter-spacing: 0.08em;
+      background: rgba(100,144,255,0.1);
+      border: 1px solid rgba(100,144,255,0.25);
+      color: #6490ff;
+    }
+    .confluence-score-badge.agree { background: rgba(200,255,0,0.12); border-color: rgba(200,255,0,0.3); color: #c8ff00; }
+    .confluence-score-badge.split { background: rgba(200,255,0,0.1); border-color: rgba(200,255,0,0.25); color: #c8ff00; }
+    .confluence-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .confluence-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 14px 8px;
+      background: rgba(6,12,10,0.9);
+      border: 1px solid rgba(200,255,0,0.08);
+      border-radius: 4px;
+    }
+    .confluence-tf {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      color: rgba(200,220,210,0.45);
+    }
+    .confluence-dir {
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: rgba(200,220,210,0.5);
+    }
+    .confluence-dir.up   { color: #c8ff00; }
+    .confluence-dir.down { color: #e05555; }
+    .confluence-dir.skip { color: rgba(200,220,210,0.3); font-size: 0.8rem; }
+    .confluence-conf {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      color: rgba(200,220,210,0.35);
+    }
+    .confluence-alert {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: rgba(200,255,0,0.07);
+      border: 1px solid rgba(200,255,0,0.2);
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: #c8ff00;
+      animation: confPulse 2s ease-in-out infinite;
+    }
+    .confluence-alert.bearish { background: rgba(224,85,85,0.07); border-color: rgba(224,85,85,0.2); color: #e05555; }
+    .confluence-alert-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #c8ff00;
+      flex-shrink: 0;
+      animation: dotPulse 1.2s ease-in-out infinite;
+    }
+    .confluence-alert.bearish .confluence-alert-dot { background: #e05555; }
+    @keyframes confPulse { 0%,100%{opacity:1;} 50%{opacity:0.7;} }
+
+    /* ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ #43 Volatility Meter ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ */
+    .agent-card-volatility { border-left: 3px solid #dfffe5; }
+    .vol-level-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 4px;
+      letter-spacing: 0.1em;
+    }
+    .vol-level-badge.low     { background: rgba(200,255,0,0.1);  border: 1px solid rgba(200,255,0,0.25);  color: #c8ff00; }
+    .vol-level-badge.medium  { background: rgba(223,255,229,0.1);  border: 1px solid rgba(223,255,229,0.25);  color: #dfffe5; }
+    .vol-level-badge.high    { background: rgba(224,140,60,0.1);  border: 1px solid rgba(224,140,60,0.25);  color: #e08c3c; }
+    .vol-level-badge.extreme { background: rgba(224,85,85,0.1);   border: 1px solid rgba(224,85,85,0.25);   color: #e05555; }
+    .vol-meter-wrap { margin: 16px 0; }
+    .vol-meter-track {
+      height: 10px;
+      background: rgba(255,255,255,0.14);
+      border-radius: 5px;
+      overflow: hidden;
+      position: relative;
+      margin-bottom: 8px;
+    }
+    .vol-meter-fill {
+      height: 100%;
+      border-radius: 5px;
+      transition: width 0.8s ease, background 0.8s ease;
+      background: linear-gradient(90deg, #c8ff00, #dfffe5, #e08c3c, #e05555);
+    }
+    .vol-meter-zones {
+      display: flex;
+      justify-content: space-between;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      color: rgba(230,240,235,0.62);
+      letter-spacing: 0.06em;
+    }
+    .vol-stats-row {
+      display: flex;
+      gap: 16px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(132,224,178,0.18);
+    }
+    .vol-stat { display: flex; flex-direction: column; gap: 3px; }
+    .vol-stat-label { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: rgba(228,238,233,0.72); letter-spacing: 0.08em; }
+    .vol-stat-val   { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; font-weight: 600; color: rgba(245,250,247,0.96); letter-spacing: 0.03em; }
+    .agent-pred-volatility {
+      margin-bottom: 20px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid rgba(132,224,178,0.18);
+    }
+
+    /* ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ #10 Market Odds Accuracy ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ */
+    .agent-card-odds-accuracy { border-left: 3px solid #c8ff00; }
+    .odds-accuracy-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .odds-acc-item { text-align: center; }
+    .odds-acc-val {
+      display: block;
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: clamp(20px, 2vw, 28px);
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 1px;
+    }
+    .odds-acc-label {
+      display: block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.08em;
+      color: rgba(200,220,210,0.45);
+      margin-top: 4px;
+    }
+    .odds-acc-note {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: rgba(200,220,210,0.3);
+      letter-spacing: 0.05em;
+      text-align: right;
+    }
+
+    /* ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ Share Button ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ */
+    .share-pred-btn {
+      position: fixed;
+      bottom: 80px;
+      right: 24px;
+      width: 44px; height: 44px;
+      background: rgba(10,18,14,0.95);
+      border: 1px solid rgba(200,255,0,0.2);
+      border-radius: 50%;
+      color: rgba(200,255,0,0.7);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      z-index: 200;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    }
+    .share-pred-btn:hover { border-color: rgba(200,255,0,0.5); color: #c8ff00; }
+
+    /* ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ Notification Button ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ */
+    .notif-btn {
+      position: fixed;
+      bottom: 132px;
+      right: 24px;
+      width: 44px; height: 44px;
+      background: rgba(10,18,14,0.95);
+      border: 1px solid rgba(200,255,0,0.2);
+      border-radius: 50%;
+      color: rgba(200,255,0,0.7);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      z-index: 200;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    }
+    .notif-btn:hover { border-color: rgba(200,255,0,0.5); color: #c8ff00; }
+    .notif-btn.active { background: rgba(200,255,0,0.12); border-color: rgba(200,255,0,0.4); color: #c8ff00; }
+
+    /* ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ Share Modal ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ */
+    .share-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(4px);
+      z-index: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .share-modal {
+      background: rgba(8,14,12,0.98);
+      border: 1px solid rgba(200,255,0,0.2);
+      border-radius: 12px;
+      padding: 24px;
+      max-width: 420px;
+      width: 90%;
+      position: relative;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.7);
+    }
+    .share-modal-close {
+      position: absolute;
+      top: 14px; right: 14px;
+      background: none;
+      border: none;
+      color: rgba(200,220,210,0.4);
+      cursor: pointer;
+      padding: 4px;
+      transition: color 0.2s;
+    }
+    .share-modal-close:hover { color: #e05555; }
+
+    /* ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ Share Card ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ */
+    .share-card {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 16px;
+      border: 1px solid rgba(200,255,0,0.15);
+    }
+    .share-card-bg {
+      position: absolute;
+      inset: 0;
+      background: rgba(239, 247, 237, 0.08);
+      opacity: 1;
+      backdrop-filter: blur(18px) saturate(1.1);
+    }
+    .share-card-content {
+      position: relative;
+      z-index: 1;
+      padding: 22px 20px 16px;
+    }
+    .share-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .share-card-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .share-card-brand {
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      color: rgba(200,220,210,0.9);
+    }
+    .share-card-tf {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      background: rgba(200,255,0,0.1);
+      border: 1px solid rgba(200,255,0,0.25);
+      color: #c8ff00;
+      padding: 3px 10px;
+      border-radius: 3px;
+    }
+    .share-card-main {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-bottom: 18px;
+    }
+    .share-card-left {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: flex-start;
+      flex-shrink: 0;
+    }
+    .share-card-vol {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(223,255,229,0.8);
+      background: rgba(223,255,229,0.08);
+      border: 1px solid rgba(223,255,229,0.22);
+      padding: 3px 10px;
+      border-radius: 3px;
+    }
+    .share-card-vol.low {
+      color: rgba(200,255,0,0.9);
+      background: rgba(200,255,0,0.08);
+      border-color: rgba(200,255,0,0.22);
+    }
+    .share-card-vol.med {
+      color: rgba(223,255,229,0.9);
+      background: rgba(223,255,229,0.08);
+      border-color: rgba(223,255,229,0.22);
+    }
+    .share-card-vol.high {
+      color: rgba(224,85,85,0.9);
+      background: rgba(224,85,85,0.07);
+      border-color: rgba(224,85,85,0.22);
+    }
+    .share-card-vol.extreme {
+      color: rgba(224,85,85,0.95);
+      background: rgba(224,85,85,0.09);
+      border-color: rgba(224,85,85,0.28);
+    }
+    .share-card-dir {
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 2.8rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: #c8ff00;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .share-card-dir.down { color: #e05555; }
+    .share-card-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      flex: 1;
+    }
+    .share-card-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: rgba(200,220,210,0.55);
+    }
+    .share-card-row svg { flex-shrink: 0; opacity: 0.6; }
+    .share-card-val {
+      margin-left: auto;
+      color: rgba(200,220,210,0.9);
+      font-weight: 600;
+    }
+    .share-card-result.win { color: #c8ff00; }
+    .share-card-result.loss { color: #e05555; }
+    .share-card-result.pending,
+    .share-card-result.unsettled { color: rgba(223,255,229,0.92); }
+    .share-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 12px;
+      border-top: 1px solid rgba(200,255,0,0.08);
+    }
+    .share-card-site {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: rgba(200,255,0,0.5);
+      letter-spacing: 0.08em;
+    }
+    .share-card-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      color: rgba(200,220,210,0.25);
+    }
+
+    /* ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ Share Actions ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ */
+    .share-actions {
+      display: flex;
+      gap: 10px;
+    }
+    .share-action-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 6px;
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+    }
+    .share-twitter {
+      background: #000;
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+    .share-twitter:hover { background: #111; }
+    .share-copy {
+      background: rgba(200,255,0,0.1);
+      border: 1px solid rgba(200,255,0,0.25);
+      color: #c8ff00;
+    }
+    .share-copy:hover { background: rgba(200,255,0,0.2); }
+
+    /* ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ Community Chat ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ */
+    .chat-widget {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 300;
+      font-family: 'Chakra Petch', sans-serif;
+    }
+    .chat-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(10,18,14,0.97);
+      border: 1px solid rgba(200,255,0,0.3);
+      color: #c8ff00;
+      padding: 10px 18px;
+      cursor: pointer;
+      border-radius: 24px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      transition: all 0.2s;
+    }
+    .chat-toggle:hover { background: rgba(16,28,20,0.98); border-color: rgba(200,255,0,0.5); }
+    .chat-unread {
+      background: #e05555;
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 10px;
+    }
+    .chat-panel {
+      position: absolute;
+      bottom: 52px;
+      right: 0;
+      width: 340px;
+      background: rgba(8,14,12,0.98);
+      border: 1px solid rgba(200,255,0,0.2);
+      border-radius: 10px;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.6);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .chat-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      background: rgba(10,18,14,0.9);
+      border-bottom: 1px solid rgba(200,255,0,0.1);
+    }
+    .chat-title { font-size: 0.82rem; font-weight: 600; color: #e8f0ec; flex: 1; }
+    .chat-online { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: #c8ff00; letter-spacing: 0.08em; }
+    .chat-close  { background: none; border: none; color: rgba(200,220,210,0.4); cursor: pointer; font-size: 1rem; padding: 0 4px; transition: color 0.2s; }
+    .chat-close:hover { color: #e05555; }
+    .chat-messages {
+      height: 280px;
+      overflow-y: auto;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .chat-messages::-webkit-scrollbar { width: 4px; }
+    .chat-messages::-webkit-scrollbar-thumb { background: rgba(200,255,0,0.25); border-radius: 2px; }
+    .chat-msg {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .chat-msg-header { display: flex; align-items: center; gap: 8px; }
+    .chat-msg-user {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #c8ff00;
+      letter-spacing: 0.06em;
+    }
+    .chat-msg-time {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem;
+      color: rgba(200,220,210,0.3);
+    }
+    .chat-msg-text {
+      font-size: 0.8rem;
+      color: rgba(200,220,210,0.8);
+      line-height: 1.5;
+      word-break: break-word;
+    }
+    .chat-loading { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: rgba(200,220,210,0.3); text-align: center; padding: 20px 0; }
+    .chat-input-row {
+      display: flex;
+      gap: 8px;
+      padding: 10px 12px;
+      border-top: 1px solid rgba(200,255,0,0.1);
+      background: rgba(10,18,14,0.9);
+    }
+    .chat-input {
+      flex: 1;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(200,255,0,0.15);
+      border-radius: 6px;
+      padding: 8px 12px;
+      color: #e8f0ec;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      outline: none;
+    }
+    .chat-input:focus { border-color: rgba(200,255,0,0.35); }
+    .chat-input::placeholder { color: rgba(200,220,210,0.25); }
+    .chat-send {
+      background: rgba(200,255,0,0.12);
+      border: 1px solid rgba(200,255,0,0.25);
+      color: #c8ff00;
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .chat-send:hover { background: rgba(200,255,0,0.22); }
+
+    @media (max-width: 768px) {
+      .chat-panel { width: 300px; }
+      .sound-alert-btn { display: none; }
+    }
+    .coming-soon-section {
+      padding: 120px 0 100px;
+      position: relative;
+      background: var(--bg);
+      overflow: hidden;
+    }
+
+    .coming-soon-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(200, 255, 0, 0.03) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 50%, rgba(100, 160, 255, 0.03) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .coming-soon-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .coming-soon-eyebrow {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 5px;
+      color: rgba(200, 255, 0, 0.7);
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .coming-soon-eyebrow::before,
+    .coming-soon-eyebrow::after {
+      content: '——';
+      margin: 0 10px;
+      opacity: 0.4;
+    }
+
+    .coming-soon-title {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 3.5vw, 42px);
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: #ffffff;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      text-shadow: 0 0 30px rgba(200, 255, 0, 0.15);
+    }
+
+    .coming-soon-subtitle {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: rgba(200, 220, 210, 0.55);
+      letter-spacing: 0.5px;
+      max-width: 520px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+
+    .coming-soon-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+
+    .coming-soon-card {
+      position: relative;
+      background: rgba(10, 18, 14, 0.95);
+      border: 1px solid rgba(200, 255, 0, 0.1);
+      overflow: hidden;
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.35s ease;
+    }
+
+    .coming-soon-card:hover {
+      transform: translateY(-6px);
+    }
+
+    .coming-soon-card:nth-child(1):hover { border-color: rgba(100, 160, 255, 0.3); }
+    .coming-soon-card:nth-child(2):hover { border-color: rgba(223, 255, 229, 0.3); }
+
+    /* HUD brackets */
+    .coming-soon-card::before {
+      content: '';
+      position: absolute;
+      top: -1px; left: -1px;
+      width: 16px; height: 16px;
+      border-top: 1px solid rgba(200, 255, 0, 0.4);
+      border-left: 1px solid rgba(200, 255, 0, 0.4);
+      transition: transform 0.35s ease;
+      transform-origin: top left;
+    }
+    .coming-soon-card::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; right: -1px;
+      width: 16px; height: 16px;
+      border-bottom: 1px solid rgba(200, 255, 0, 0.4);
+      border-right: 1px solid rgba(200, 255, 0, 0.4);
+      transition: transform 0.35s ease;
+      transform-origin: bottom right;
+    }
+    .coming-soon-card:hover::before,
+    .coming-soon-card:hover::after { transform: scale(1.5); }
+
+    .cs-card-glow {
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      pointer-events: none;
+      opacity: 0.06;
+      transition: opacity 0.35s ease;
+    }
+    .coming-soon-card:hover .cs-card-glow { opacity: 0.12; }
+    .cs-glow-blue  { background: radial-gradient(circle, #6490ff, transparent 70%); }
+    .cs-glow-amber { background: radial-gradient(circle, #dfffe5, transparent 70%); }
+
+    .cs-card-inner {
+      padding: 32px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cs-icon-wrap {
+      width: 52px; height: 52px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+    .cs-icon-blue  { background: rgba(100, 160, 255, 0.08); border: 1px solid rgba(100, 160, 255, 0.2); color: #6490ff; }
+    .cs-icon-amber { background: rgba(223, 255, 229,  0.08); border: 1px solid rgba(223, 255, 229,  0.2); color: #dfffe5; }
+
+    .cs-content { flex: 1; }
+    .cs-content {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .cs-badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 3px;
+      padding: 3px 10px;
+      background: rgba(200, 255, 0, 0.08);
+      border: 1px solid rgba(200, 255, 0, 0.2);
+      color: rgba(200, 255, 0, 0.8);
+      margin-bottom: 12px;
+    }
+    .cs-badge-amber {
+      background: rgba(223, 255, 229, 0.08);
+      border-color: rgba(223, 255, 229, 0.2);
+      color: rgba(223, 255, 229, 0.8);
+    }
+
+    .cs-title {
+      font-family: var(--font-display);
+      font-size: clamp(22px, 2.5vw, 28px);
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #ffffff;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .cs-desc {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: rgba(200, 220, 210, 0.6);
+      line-height: 1.8;
+      letter-spacing: 0.3px;
+      margin-bottom: 16px;
+    }
+
+    .cs-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .cs-tag {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      padding: 4px 10px;
+      background: rgba(100, 160, 255, 0.06);
+      border: 1px solid rgba(100, 160, 255, 0.15);
+      color: rgba(100, 160, 255, 0.7);
+    }
+    .cs-tag-amber {
+      background: rgba(223, 255, 229, 0.06);
+      border-color: rgba(223, 255, 229, 0.15);
+      color: rgba(223, 255, 229, 0.7);
+    }
+
+    .cs-league-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .cs-league-chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 0 10px;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border: 1px solid rgba(255,255,255,0.08);
+      color: rgba(200,220,210,0.62);
+      background: rgba(255,255,255,0.03);
+    }
+
+    .cs-league-chip.active {
+      border-color: rgba(200, 255, 0, 0.28);
+      background: rgba(200, 255, 0, 0.08);
+      color: #c8ff00;
+    }
+
+    .cs-league-chip.active.cs-league-chip-amber {
+      border-color: rgba(223, 255, 229, 0.28);
+      background: rgba(223, 255, 229, 0.08);
+      color: #dfffe5;
+    }
+
+    .cs-preview-board {
+      display: grid;
+      gap: 10px;
+      padding: 14px;
+      border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.025);
+    }
+
+    .cs-preview-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .cs-preview-label {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 2.4px;
+      text-transform: uppercase;
+      color: rgba(200,220,210,0.42);
+    }
+
+    .cs-preview-state {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 0 8px;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border: 1px solid rgba(200, 255, 0, 0.22);
+      color: #c8ff00;
+      background: rgba(200, 255, 0, 0.08);
+    }
+
+    .cs-preview-state.cs-preview-state-amber {
+      border-color: rgba(223, 255, 229, 0.22);
+      color: #dfffe5;
+      background: rgba(223, 255, 229, 0.08);
+    }
+
+    .cs-match-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .cs-match {
+      padding: 12px 12px 10px;
+      border: 1px solid rgba(255,255,255,0.05);
+      background: rgba(8, 14, 12, 0.78);
+    }
+
+    .cs-match-top,
+    .cs-match-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .cs-match-time,
+    .cs-match-market,
+    .cs-match-note {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .cs-match-time,
+    .cs-match-note {
+      color: rgba(200,220,210,0.4);
+    }
+
+    .cs-match-market {
+      color: rgba(100,160,255,0.72);
+    }
+
+    .cs-match-market.cs-match-market-amber {
+      color: rgba(223,255,229,0.78);
+    }
+
+    .cs-match-teams {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin: 10px 0;
+      font-family: var(--font-display);
+      font-size: 15px;
+      letter-spacing: 0.7px;
+      color: #ffffff;
+      text-transform: uppercase;
+    }
+
+    .cs-match-footer {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .cs-match-status {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(200, 255, 0, 0.72);
+    }
+
+    .cs-match-status.cs-match-status-amber {
+      color: rgba(223, 255, 229, 0.78);
+    }
+
+    .cs-action-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 2px;
+    }
+
+    .cs-action-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 36px;
+      padding: 0 14px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 2.3px;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid rgba(200, 255, 0, 0.22);
+      color: #c8ff00;
+      background: rgba(200, 255, 0, 0.08);
+    }
+
+    .cs-action-btn.cs-action-btn-amber {
+      border-color: rgba(223, 255, 229, 0.22);
+      color: #dfffe5;
+      background: rgba(223, 255, 229, 0.08);
+    }
+
+    .cs-action-btn.secondary {
+      border-color: rgba(255,255,255,0.08);
+      color: rgba(200,220,210,0.68);
+      background: rgba(255,255,255,0.03);
+    }
+
+    .cs-mini-note {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      line-height: 1.7;
+      letter-spacing: 0.3px;
+      color: rgba(200,220,210,0.5);
+    }
+
+    .cs-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(200, 255, 0, 0.07);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: rgba(200, 220, 210, 0.35);
+      text-transform: uppercase;
+    }
+
+    .cs-status-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: rgba(100, 160, 255, 0.5);
+      animation: dotPulse 2s ease-in-out infinite;
+    }
+    .cs-dot-amber {
+      background: rgba(223, 255, 229, 0.5);
+    }
+
+    .coming-soon-footer {
+      text-align: center;
+      padding: 28px 32px;
+      background: rgba(10, 18, 14, 0.8);
+      border: 1px solid rgba(200, 255, 0, 0.1);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: rgba(200, 220, 210, 0.5);
+      letter-spacing: 0.5px;
+    }
+
+    .cs-highlight {
+      color: rgba(200, 255, 0, 0.9);
+      cursor: pointer;
+      border-bottom: 1px solid rgba(200, 255, 0, 0.3);
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .cs-highlight:hover { color: #c8ff00; border-color: #c8ff00; }
+
+    @media (max-width: 768px) {
+      .coming-soon-grid { grid-template-columns: 1fr; }
+      .cs-card-inner { padding: 24px 20px; }
+    }
+    .agent-tf-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .agent-tf-tab {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(12, 20, 16, 0.9);
+      border: 1px solid rgba(200, 255, 0, 0.15);
+      color: rgba(200, 220, 210, 0.5);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+      clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    }
+
+    .agent-tf-tab:hover {
+      border-color: rgba(200, 255, 0, 0.35);
+      color: rgba(200, 220, 210, 0.8);
+      background: rgba(16, 28, 20, 0.95);
+    }
+
+    .agent-tf-tab.active {
+      background: rgba(200, 255, 0, 0.1);
+      border-color: rgba(200, 255, 0, 0.45);
+      color: #c8ff00;
+      box-shadow: 0 0 16px rgba(200, 255, 0, 0.08);
+    }
+
+    .tf-tab-label { letter-spacing: 0.14em; }
+
+    .tf-tab-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(200, 255, 0, 0.25);
+      transition: all 0.3s;
+    }
+
+    .agent-tf-tab.active .tf-tab-dot {
+      background: #c8ff00;
+      box-shadow: 0 0 6px rgba(200, 255, 0, 0.6);
+      animation: dotPulse 2s ease-in-out infinite;
+    }
+    .stats { position: relative; }
+
+    .agent-content-wrap {
+      transition: filter 0.4s ease;
+    }
+    .agent-content-wrap.locked {
+      filter: blur(10px);
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .agent-access-gate {
+      display: none;
+      position: absolute;
+      inset: 0;
+      z-index: 50;
+      align-items: center;
+      justify-content: center;
+      background: rgba(5, 8, 12, 0.55);
+      backdrop-filter: blur(2px);
+    }
+    .agent-access-gate.visible {
+      display: flex;
+    }
+
+    .agent-access-inner {
+      background: linear-gradient(135deg, rgba(10,16,24,0.98) 0%, rgba(16,24,36,0.98) 100%);
+      border: 1px solid rgba(200, 255, 0, 0.25);
+      border-radius: 12px;
+      padding: 40px 36px;
+      max-width: 420px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 0 60px rgba(200,255,0,0.08), 0 24px 64px rgba(0,0,0,0.6);
+    }
+
+    .agent-access-icon {
+      font-size: 2.4rem;
+      margin-bottom: 12px;
+    }
+
+    .agent-access-title {
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: #e8f0ec;
+      margin: 0 0 10px;
+    }
+
+    .agent-access-desc {
+      font-size: 0.82rem;
+      color: rgba(168,184,176,0.7);
+      margin: 0 0 24px;
+      line-height: 1.55;
+    }
+
+    .agent-access-gen-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #c8ff00, #9ed600);
+      color: #05080c;
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 22px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      margin-bottom: 20px;
+    }
+    .agent-access-gen-btn:hover { opacity: 0.85; }
+    .agent-access-gen-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    .agent-access-code-display {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+      background: rgba(200,255,0,0.06);
+      border: 1px solid rgba(200,255,0,0.2);
+      border-radius: 8px;
+      padding: 12px 16px;
+    }
+    .agent-access-code-display.visible { display: flex; }
+
+    .agent-access-code-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      color: rgba(200,255,0,0.6);
+    }
+
+    .agent-access-code-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .agent-access-code-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: #c8ff00;
+    }
+
+    .agent-access-copy-btn {
+      background: none;
+      border: 1px solid rgba(200,255,0,0.3);
+      color: rgba(200,255,0,0.7);
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .agent-access-copy-btn:hover {
+      background: rgba(200,255,0,0.1);
+      color: #c8ff00;
+    }
+
+    .agent-access-enter {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .agent-access-input {
+      flex: 1;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(200,255,0,0.2);
+      border-radius: 6px;
+      padding: 10px 14px;
+      color: #e8f0ec;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      letter-spacing: 0.05em;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .agent-access-input:focus {
+      border-color: rgba(200,255,0,0.5);
+    }
+    .agent-access-input::placeholder { color: rgba(168,184,176,0.35); }
+
+    .agent-access-unlock-btn {
+      background: rgba(200,255,0,0.12);
+      border: 1px solid rgba(200,255,0,0.3);
+      color: #c8ff00;
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      border-radius: 6px;
+      padding: 10px 18px;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .agent-access-unlock-btn:hover {
+      background: rgba(200,255,0,0.22);
+    }
+    .agent-access-unlock-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .agent-access-msg {
+      min-height: 20px;
+      font-size: 0.78rem;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.04em;
+    }
+    .agent-access-msg.error { color: #c94c4c; }
+    .agent-access-msg.success { color: #c8ff00; }
+    .agent-access-msg.info { color: rgba(168,184,176,0.7); }
+
+    .agent-access-divider {
+      font-size: 0.7rem;
+      color: rgba(168,184,176,0.35);
+      text-align: center;
+      margin: 16px 0 12px;
+      letter-spacing: 0.06em;
+    }
+
+    .agent-access-waiting {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(200,255,0,0.06);
+      border: 1px solid rgba(200,255,0,0.15);
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      font-size: 0.8rem;
+      color: rgba(168,184,176,0.7);
+    }
+
+    .agent-wait-spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(200,255,0,0.2);
+      border-top-color: #c8ff00;
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+      flex-shrink: 0;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .agent-code-received-label {
+      font-size: 0.82rem;
+      color: #c8ff00;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .agent-code-received-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(200,255,0,0.07);
+      border: 1px solid rgba(200,255,0,0.2);
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-bottom: 14px;
+    }
+
+    .agent-access-copy-btn {
+      background: rgba(200,255,0,0.12);
+      border: 1px solid rgba(200,255,0,0.3);
+      color: #c8ff00;
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      border-radius: 5px;
+      padding: 6px 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .agent-access-copy-btn:hover { background: rgba(200,255,0,0.22); }
+  </style>
+</head>
+<body>
+
+  <!-- Skip to content -->
+  <a href="#home" class="skip-to-content">Skip to content</a>
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#" class="logo">Ponis IQ</a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#stats">Ponis IQ Agent</a></li>
+        <li><a href="paper-trader.html" target="_blank" rel="noopener noreferrer">Ponis IQ Wallet</a></li>
+        <li><a href="#kagami">Ask PonisIQ</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero" id="home"><div class="hero-inner">
+      <div class="hero-text">
+        <div class="hero-topline">
+          <span class="hero-badge">NOW LIVE</span>
+          <span class="hero-topline-text">AI BTC Market Dashboard</span>
+        </div>
+        <h1 class="hero-title">Ponis IQ<br /><span class="accent-gradient">Market Intelligence.</span></h1>
+        <p class="hero-desc">
+          Live BTC predictions, price-to-beat tracking, volatility context,
+          win-rate history, and guided explanations in one clean dashboard.
+        </p>
+        <div class="hero-buttons">
+          <a href="#stats" class="btn btn-accent btn-lg">Open Agent</a>
+          <a href="#kagami" class="btn btn-ghost btn-lg">Ask PonisIQ</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+  
+
+  <!-- About Section -->
+  <section class="about" id="about">
+    <div class="hud-float hud-float-tl" aria-hidden="true">
+      <span class="hud-float-text">SYS.STATUS: ACTIVE</span>
+      <span class="hud-float-coord">47.3812° N</span>
+    </div>
+    <div class="container">
+      <div class="about-shell">
+        <div class="about-overview reveal-left">
+          <span class="about-kicker">About Ponis IQ</span>
+          <h2 class="about-title">A sharper command center for BTC market decisions.</h2>
+          <p class="about-copy">Ponis IQ combines live price data, prediction timing, market state, and readable AI context so the dashboard is easier to act on.</p>
+          <div class="about-actions">
+            <a href="#stats" class="btn btn-accent">Open Agent</a>
+            <a href="#kagami" class="btn btn-ghost">Ask PonisIQ</a>
+          </div>
+          <div class="about-metrics">
+            <div class="about-metric">
+              <span class="about-metric-label">Primary Market</span>
+              <span class="about-metric-value">BTC</span>
+            </div>
+            <div class="about-metric">
+              <span class="about-metric-label">Timeframes</span>
+              <span class="about-metric-value">5M / 15M / 1H</span>
+            </div>
+            <div class="about-metric">
+              <span class="about-metric-label">Core Model</span>
+              <span class="about-metric-value">AI Signals</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="about-side reveal-right">
+          <div class="about-side-card">
+            <span class="about-side-label">System Frame</span>
+            <p class="about-side-text">Ponis IQ keeps the live prediction, PTB, volatility, odds, and track record close together so each window is easier to read.</p>
+          </div>
+          <div class="about-side-card">
+            <span class="about-side-label">What Matters</span>
+            <p class="about-side-text">Clear timing, transparent context, and fast explanations matter more than decorative layers when the market is moving.</p>
+          </div>
+        </div>
+
+        <div class="about-feature-grid">
+          <article class="about-feature-card reveal">
+            <div class="feature-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5"/></svg>
+            </div>
+            <div>
+              <h3>Multi-Timeframe Context</h3>
+              <p>Compare short and longer BTC windows without losing the active PTB, countdown, or signal state.</p>
+            </div>
+          </article>
+          <article class="about-feature-card reveal">
+            <div class="feature-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a4 4 0 0 0-8 0v2"/></svg>
+            </div>
+            <div>
+              <h3>Live Data Inputs</h3>
+              <p>Price, timing, odds, volatility, and technical state update together so each prediction has context.</p>
+            </div>
+          </article>
+          <article class="about-feature-card reveal">
+            <div class="feature-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div>
+              <h3>Track Record</h3>
+              <p>Holders participate in treasury direction, roadmap priorities, and ecosystem decisions that shape what ships next.</p>
+            </div>
+          </article>
+          <article class="about-feature-card reveal">
+            <div class="feature-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+            </div>
+            <div>
+              <h3>Guided Market Explanations</h3>
+              <p>Ask PonisIQ to translate the current call, volatility, technical snapshot, and win-rate data into plain language.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Ponis IQ Agent ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â Live BTC Prediction Dashboard -->
+  <section class="stats" id="stats">
+    <!-- Agent content wrapper -->
+    <div class="agent-content-wrap" id="agentContentWrap">
+    <div class="hud-float hud-float-tl" aria-hidden="true">
+      <span class="hud-float-text">DATA.STREAM</span>
+      <span class="hud-float-coord">LIVE FEED</span>
+    </div>
+    <div class="container">
+      <div class="agent-overview reveal">
+        <div class="agent-overview-main">
+          <div class="agent-heading">
+            <h2 class="stats-title reveal-mask">Ponis IQ Agent</h2>
+            <div class="agent-subtitle-row">
+              <p class="stats-subtitle" id="agentSubtitle">Live BTC predictions powered by AI + on-chain data.</p>
+              <button
+                class="agent-help-trigger"
+                id="agentHelpTrigger"
+                type="button"
+                aria-expanded="false"
+                aria-controls="agentHelpPanel"
+                aria-label="Open Ponis IQ Agent guide"
+                title="How Ponis IQ Agent works"
+              >!</button>
+            </div>
+          </div>
+
+          <!-- Model info banner -->
+          <div class="agent-model-bar">
+            <div class="agent-model-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="4" y="4" width="16" height="16" rx="2"/>
+                <circle cx="9" cy="10" r="1.5"/>
+                <circle cx="15" cy="10" r="1.5"/>
+                <path d="M9 15h6"/>
+              </svg>
+            </div>
+            <span class="agent-model-label">MODEL</span>
+            <span class="agent-model-name">PonisIQ Neural Engine v1</span>
+            <span class="agent-model-divider">|</span>
+            <span class="agent-model-detail" id="agentModelDetail">5-min BTC Prediction</span>
+            <span class="agent-model-divider">|</span>
+            <span class="agent-model-detail">Multi-Signal Fusion</span>
+            <span class="agent-model-divider">|</span>
+            <span class="agent-model-status">LIVE</span>
+          </div>
+
+        </div>
+
+        <div class="agent-overview-side">
+          <!-- Timeframe Tab Switcher -->
+          <div class="agent-tf-tabs" id="agentTfTabs">
+            <button class="agent-tf-tab active" data-tf="5m">
+              <span class="tf-tab-label">5 MIN</span>
+              <span class="tf-tab-dot" id="tfDot5m"></span>
+            </button>
+            <button class="agent-tf-tab" data-tf="15m">
+              <span class="tf-tab-label">15 MIN</span>
+              <span class="tf-tab-dot" id="tfDot15m"></span>
+            </button>
+            <button class="agent-tf-tab" data-tf="1h">
+              <span class="tf-tab-label">1 HOUR</span>
+              <span class="tf-tab-dot" id="tfDot1h"></span>
+            </button>
+          </div>
+
+          <div class="agent-live-meta">
+            <div class="agent-status-bar" id="agentStatusBar">
+              <span class="agent-status-dot" id="agentStatusDot"></span>
+              <span class="agent-status-text" id="agentStatusText">CONNECTING...</span>
+            </div>
+            <div class="ws-indicator" id="wsIndicator" title="WebSocket status">
+              <span class="ws-dot" id="wsDot"></span>
+              <span class="ws-text" id="wsText">WS: Connecting</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main dashboard grid -->
+      <div class="agent-dashboard reveal">
+
+        <!-- Live BTC Price ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â hero card -->
+        <div class="agent-card agent-card-price">
+          <div class="agent-card-header">
+            <span class="agent-card-label">BTC / USD</span>
+            <span class="agent-price-source" id="agentPriceSource">--</span>
+          </div>
+          <div class="agent-price" id="agentBtcPrice">--</div>
+          <div class="agent-ptb-inline">
+            <span class="agent-ptb-inline-label">PTB</span>
+            <span class="agent-ptb-inline-value" id="agentPtb">--</span>
+          </div>
+          <div class="agent-price-change" id="agentPriceChange">--</div>
+          <div class="agent-ptb-distance" id="agentPtbDistance">
+            <div class="agent-ptb-distance-header">
+              <span class="agent-ptb-distance-label">Distance to PTB</span>
+              <span class="agent-ptb-distance-status" id="agentPtbDistanceStatus">--</span>
+            </div>
+            <div class="agent-ptb-distance-grid">
+              <div class="agent-ptb-distance-item">
+                <span class="agent-ptb-distance-key">Spread</span>
+                <span class="agent-ptb-distance-val" id="agentPtbDistanceValue">--</span>
+              </div>
+              <div class="agent-ptb-distance-item">
+                <span class="agent-ptb-distance-key">Percent</span>
+                <span class="agent-ptb-distance-val" id="agentPtbDistancePct">--</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Current Prediction -->
+        <div class="agent-card agent-card-prediction">
+          <div class="agent-pred-volatility">
+            <div class="agent-card-header">
+              <span class="agent-card-label">VOLATILITY METER</span>
+              <span class="vol-level-badge" id="volLevelBadge">--</span>
+            </div>
+            <div class="vol-meter-wrap">
+              <div class="vol-meter-track">
+                <div class="vol-meter-fill" id="volMeterFill" style="width:0%"></div>
+                <div class="vol-meter-zones">
+                  <span>LOW</span><span>MED</span><span>HIGH</span><span>EXTREME</span>
+                </div>
+              </div>
+            </div>
+            <div class="vol-stats-row">
+              <div class="vol-stat">
+                <span class="vol-stat-label">ATR %</span>
+                <span class="vol-stat-val" id="volAtr">--</span>
+              </div>
+              <div class="vol-stat">
+                <span class="vol-stat-label">BB Width</span>
+                <span class="vol-stat-val" id="volBb">--</span>
+              </div>
+              <div class="vol-stat">
+                <span class="vol-stat-label">Vol Z</span>
+                <span class="vol-stat-val" id="volZ">--</span>
+              </div>
+            </div>
+          </div>
+          <div class="agent-card-header agent-current-pred-header">
+            <span class="agent-card-label">CURRENT PREDICTION</span>
+            <span class="agent-countdown" id="agentCountdown">--:--</span>
+          </div>
+          <div class="agent-pred-stage">
+            <div class="agent-pred-live-stage" id="agentPredLiveStage">
+              <div class="agent-call" id="agentCall">
+                <span class="agent-call-text" id="agentCallText">WAITING...</span>
+              </div>
+              <div class="agent-final-analyzing" id="agentFinalAnalyzing" style="display:none;">
+                <div class="dot-spinner"></div>
+                <span>Analyzing final votes...</span>
+              </div>
+              <div class="agent-odds">
+                <div class="agent-odds-bar">
+                  <div class="agent-odds-fill agent-odds-up" id="agentOddsOver" style="width:50%"></div>
+                  <div class="agent-odds-fill agent-odds-down" id="agentOddsUnder" style="width:50%"></div>
+                </div>
+                <div class="agent-odds-labels">
+                  <span class="agent-odds-label up" id="agentOddsOverPct">UP --</span>
+                  <span class="agent-odds-label down" id="agentOddsUnderPct">DOWN --</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Final Prediction (appears at 2min mark) -->
+            <div class="agent-final-pred" id="agentFinalPred" style="display:none;">
+              <div class="agent-final-pred-glow"></div>
+              <div class="agent-final-pred-top">
+                <span class="agent-final-pred-icon" id="agentFinalIcon"></span>
+                <div class="agent-final-pred-info">
+                  <span class="agent-final-pred-tag">FINAL PREDICTION <span class="agent-final-conf" id="agentFinalConf"></span></span>
+                  <span class="agent-final-pred-call" id="agentFinalCall">--</span>
+                </div>
+                <div class="agent-final-pred-meta">
+                  <span class="agent-final-pred-countdown" id="agentFinalCountdown">--:--</span>
+                  <span class="agent-final-pred-status" id="agentFinalStatus"></span>
+                  <span class="agent-final-pred-price" id="agentFinalPrice"></span>
+                </div>
+              </div>
+              <div class="agent-final-pred-signals" id="agentFinalSignals"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- W/L Stats -->
+        <div class="agent-card agent-card-stats">
+          <div class="agent-card-header">
+            <span class="agent-card-label">TRACK RECORD</span>
+          </div>
+          <div class="agent-stats-grid">
+            <div class="agent-stat">
+              <span class="agent-stat-value agent-stat-wins" id="agentWins">0</span>
+              <span class="agent-stat-label">WINS</span>
+            </div>
+            <div class="agent-stat">
+              <span class="agent-stat-value agent-stat-losses" id="agentLosses">0</span>
+              <span class="agent-stat-label">LOSSES</span>
+            </div>
+            <div class="agent-stat">
+              <span class="agent-stat-value agent-stat-wr" id="agentWinRate">0%</span>
+              <span class="agent-stat-label">WIN RATE</span>
+            </div>
+            <div class="agent-stat">
+              <span class="agent-stat-value" id="agentTotal">0</span>
+              <span class="agent-stat-label">TOTAL</span>
+            </div>
+          </div>
+          <div class="agent-track-meta">
+            <div class="agent-track-meta-row">
+              <span class="agent-track-meta-label">WS Messages:</span>
+              <span class="agent-track-meta-value" id="wsCount">55</span>
+            </div>
+            <div class="agent-track-meta-row">
+              <span class="agent-track-meta-label">All-time Win Streak:</span>
+              <span class="agent-track-meta-value" id="allWinStreak">60</span>
+            </div>
+            <div class="agent-track-meta-row">
+              <span class="agent-track-meta-label">Current Win Streak:</span>
+              <span class="agent-track-meta-value" id="currWinStreak">2</span>
+            </div>
+            <div class="agent-track-meta-row">
+              <span class="agent-track-meta-label">All-time Loss Streak:</span>
+              <span class="agent-track-meta-value" id="allLossStreak">3</span>
+            </div>
+            <div class="agent-track-meta-row">
+              <span class="agent-track-meta-label">Current Loss Streak:</span>
+              <span class="agent-track-meta-value" id="currLossStreak">0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="agent-side-stack">
+          <!-- TA Snapshot -->
+          <div class="agent-card agent-card-ta">
+            <div class="agent-card-header">
+              <span class="agent-card-label">TECHNICAL SNAPSHOT</span>
+            </div>
+            <div class="agent-ta-grid">
+              <div class="agent-ta-row">
+                <span class="agent-ta-key">RSI (14)</span>
+                <span class="agent-ta-val" id="agentRsi">--</span>
+              </div>
+              <div class="agent-ta-row">
+                <span class="agent-ta-key">MACD</span>
+                <span class="agent-ta-val" id="agentMacd">--</span>
+              </div>
+              <div class="agent-ta-row">
+                <span class="agent-ta-key">EMA Trend</span>
+                <span class="agent-ta-val" id="agentEma">--</span>
+              </div>
+              <div class="agent-ta-row">
+                <span class="agent-ta-key">VWAP Dist</span>
+                <span class="agent-ta-val" id="agentVwap">--</span>
+              </div>
+              <div class="agent-ta-row">
+                <span class="agent-ta-key">Vol Z-Score</span>
+                <span class="agent-ta-val" id="agentVol">--</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Model Performance -->
+          <div class="agent-card agent-card-model-perf">
+            <div class="agent-card-header">
+              <span class="agent-card-label">MODEL PERFORMANCE</span>
+            </div>
+            <div class="agent-model-perf-grid">
+              <div class="agent-model-perf-item">
+                <span class="agent-model-perf-label">Accuracy</span>
+                <span class="agent-model-perf-value" id="agentAccuracy">--</span>
+              </div>
+              <div class="agent-model-perf-item">
+                <span class="agent-model-perf-label">Precision</span>
+                <span class="agent-model-perf-value" id="agentPrecision">--</span>
+              </div>
+              <div class="agent-model-perf-item">
+                <span class="agent-model-perf-label">Model Sats</span>
+                <span class="agent-model-perf-value" id="agentF1">--</span>
+              </div>
+              <div class="agent-model-perf-item">
+                <span class="agent-model-perf-label">ROC-AUC</span>
+                <span class="agent-model-perf-value" id="agentRocAuc">--</span>
+              </div>
+            </div>
+            <div class="agent-model-perf-confusion">
+              <span class="agent-model-perf-cm">TP: <span class="cm-green" id="agentTP">0</span></span>
+              <span class="agent-model-perf-cm">TN: <span class="cm-green" id="agentTN">0</span></span>
+              <span class="agent-model-perf-cm">FP: <span class="cm-red" id="agentFP">0</span></span>
+              <span class="agent-model-perf-cm">FN: <span class="cm-red" id="agentFN">0</span></span>
+              <span class="agent-model-perf-cm">Recall: <span class="cm-accent" id="agentRecall">--</span></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- BTC Price Chart -->
+        <div class="agent-main-stack">
+        <div class="agent-card agent-card-chart">
+          <div class="agent-card-header">
+            <span class="agent-card-label">BTC / USD — LIVE</span>
+          </div>
+          <div class="agent-chart-container">
+            <canvas id="agentChart"></canvas>
+            <div class="agent-chart-tooltip" id="agentChartTooltip"></div>
+          </div>
+          <div class="agent-chart-stats">
+            <span class="agent-chart-stat">H: <span id="agentChartHigh" class="bullish">--</span></span>
+            <span class="agent-chart-stat">L: <span id="agentChartLow" class="bearish">--</span></span>
+            <span class="agent-chart-stat">Δ: <span id="agentChartChange">--</span></span>
+          </div>
+        </div>
+
+        <!-- Recent Predictions History -->
+        <div class="agent-card agent-card-history">
+          <div class="agent-card-header">
+            <span class="agent-card-label">RECENT PREDICTIONS</span>
+          </div>
+          <div class="agent-history-header-row">
+            <span>TIME</span>
+            <span>PTB</span>
+            <span>CALL</span>
+            <span>END PRICE</span>
+            <span>RESULT</span>
+          </div>
+          <div class="agent-history-list" id="agentHistoryList">
+            <div class="agent-history-empty">Loading predictions...</div>
+          </div>
+        </div>
+        </div>
+
+      </div>
+    </div>
+    </div><!-- /.agent-content-wrap -->
+  </section>
+
+  <!-- ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ Share Prediction Button ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ -->
+  <div class="agent-help-backdrop" id="agentHelpBackdrop" hidden></div>
+  <div class="agent-help-panel" id="agentHelpPanel" hidden role="dialog" aria-modal="true" aria-labelledby="agentHelpTitle">
+    <div class="agent-help-panel-header">
+      <span class="agent-help-kicker">Agent Guide</span>
+      <button class="agent-help-close" id="agentHelpClose" type="button" aria-label="Close Ponis IQ Agent guide">&times;</button>
+    </div>
+    <h3 class="agent-help-title" id="agentHelpTitle">How Ponis IQ Agent works</h3>
+    <p class="agent-help-copy">Ponis IQ Agent watches BTC live, locks a timeframe-specific PTB at the start of each market window, then combines price action, volatility, trend and order-flow signals into a final call.</p>
+    <div class="agent-help-summary">
+      <div class="agent-help-summary-item">
+        <span class="agent-help-summary-label">Timeframes</span>
+        <span class="agent-help-summary-value">5m / 15m / 1h</span>
+      </div>
+      <div class="agent-help-summary-item">
+        <span class="agent-help-summary-label">PTB Logic</span>
+        <span class="agent-help-summary-value">Window Start Price</span>
+      </div>
+      <div class="agent-help-summary-item">
+        <span class="agent-help-summary-label">Final Vote</span>
+        <span class="agent-help-summary-value">Locks Before Expiry</span>
+      </div>
+    </div>
+    <div class="agent-help-flow">
+      <span class="agent-help-section-title">Decision flow</span>
+      <div class="agent-help-flow-grid">
+        <div class="agent-help-flow-step">
+          <span class="agent-help-flow-num">01</span>
+          <span class="agent-help-flow-text">The agent reads live BTC price, exchange flow, and indicator data for the active timeframe.</span>
+        </div>
+        <div class="agent-help-flow-step">
+          <span class="agent-help-flow-num">02</span>
+          <span class="agent-help-flow-text">It compares BTC to the locked PTB for that specific market window, not a shared price across all tabs.</span>
+        </div>
+        <div class="agent-help-flow-step">
+          <span class="agent-help-flow-num">03</span>
+          <span class="agent-help-flow-text">Confidence, volatility, and directional bias update during the window until the final vote locks.</span>
+        </div>
+        <div class="agent-help-flow-step">
+          <span class="agent-help-flow-num">04</span>
+          <span class="agent-help-flow-text">After settlement, the result feeds the history, streak, win rate, and performance sections.</span>
+        </div>
+      </div>
+    </div>
+    <div class="agent-help-grid">
+      <div class="agent-help-item">
+        <span class="agent-help-item-title">Price / PTB</span>
+        <span class="agent-help-item-text">Shows the live BTC price, the Polymarket target boundary price, and how far BTC is trading above or below that level. The spread and percent fields tell you how much room remains versus the current market boundary.</span>
+      </div>
+      <div class="agent-help-item">
+        <span class="agent-help-item-title">Prediction / Volatility</span>
+        <span class="agent-help-item-text">Tracks the current directional bias, confidence, countdown to lock, and market volatility before the final vote is fixed. Once the timer reaches the lock point, the final prediction replaces the live bias and should stop changing for that window.</span>
+      </div>
+      <div class="agent-help-item">
+        <span class="agent-help-item-title">Track Record / Performance</span>
+        <span class="agent-help-item-text">Summarizes win rate, streaks, model stats, and recent outcomes so you can judge consistency instead of a single call. Use this area to see whether the model is stable across many windows, not just one good or bad result.</span>
+      </div>
+      <div class="agent-help-item">
+        <span class="agent-help-item-title">Chart / Technical Snapshot</span>
+        <span class="agent-help-item-text">Explains the live BTC chart, RSI, MACD, EMA, VWAP and volume context that support the active timeframe call. This is the section to check whether the prediction is aligned with trend, ranging behavior, and momentum structure.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ask PonisIQ Section -->
+  <section class="kagami-hero" id="kagami">
+    <div class="container">
+      <div class="kagami-hero-grid">
+        <div class="kagami-panel kagami-intro">
+          <span class="kagami-kicker">Chat Bot</span>
+          <h2 class="kagami-title">Ask PonisIQ</h2>
+          <p class="kagami-copy">A guided BTC assistant wired to the live Ponis IQ dashboard. Ask about the current call, PTB, countdown, volatility, WR, or what each signal block means.</p>
+          <div class="kagami-actions">
+            <span class="kagami-badge">Live Interface</span>
+            <a class="kagami-link-btn" href="#stats">Back to Agent</a>
+          </div>
+          <div class="kagami-tags">
+            <span class="kagami-tag">Market Q&amp;A</span>
+            <span class="kagami-tag">BTC Context</span>
+            <span class="kagami-tag">Dashboard Help</span>
+          </div>
+        </div>
+
+        <div class="kagami-side">
+          <div class="kagami-panel kagami-stat">
+            <span class="kagami-stat-label">Status</span>
+            <span class="kagami-stat-value">Local Live</span>
+            <span class="kagami-stat-note">Responds from the active Ponis IQ dashboard state in real time.</span>
+          </div>
+          <div class="kagami-panel kagami-stat">
+            <span class="kagami-stat-label">Focus</span>
+            <span class="kagami-stat-value">BTC + PTB</span>
+            <span class="kagami-stat-note">Explains the live call, PTB spread, and timeframe-specific window logic.</span>
+          </div>
+          <div class="kagami-panel kagami-stat">
+            <span class="kagami-stat-label">Mode</span>
+            <span class="kagami-stat-value">Guided Ops</span>
+            <span class="kagami-stat-note">Built for quick operator questions around signals, volatility, and performance.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="kagami-overview">
+    <div class="container">
+      <div class="kagami-workspace">
+        <div class="kagami-panel kagami-chat-shell">
+          <div class="kagami-chat-head">
+            <div>
+              <span class="kagami-card-kicker">Assistant Console</span>
+              <h2>PonisIQ Chat</h2>
+            </div>
+            <div class="kagami-chat-status">
+              <span class="kagami-chat-status-dot"></span>
+              <span>Linked to Ponis IQ Agent</span>
+            </div>
+          </div>
+
+          <div class="kagami-tf-switcher" id="kagamiTfSwitcher">
+            <button class="kagami-tf-btn active" type="button" data-kagami-tf="5m">5M</button>
+            <button class="kagami-tf-btn" type="button" data-kagami-tf="15m">15M</button>
+            <button class="kagami-tf-btn" type="button" data-kagami-tf="1h">1H</button>
+          </div>
+
+          <div class="kagami-chip-row">
+            <button class="kagami-chip" type="button" data-kagami-prompt="Summarize the current prediction.">Current call</button>
+            <button class="kagami-chip" type="button" data-kagami-prompt="How much time is left before the vote locks?">Lock timer</button>
+            <button class="kagami-chip" type="button" data-kagami-prompt="Why is PTB different on 5m, 15m, and 1h?">PTB logic</button>
+            <button class="kagami-chip" type="button" data-kagami-prompt="Explain the volatility meter.">Volatility</button>
+            <button class="kagami-chip" type="button" data-kagami-prompt="Explain the win rate calculation.">WR</button>
+            <button class="kagami-chip" type="button" data-kagami-prompt="Explain the technical snapshot.">Technical snapshot</button>
+          </div>
+
+          <div class="kagami-thread" id="kagamiMessages" aria-live="polite"></div>
+
+          <form class="kagami-compose" id="kagamiForm">
+            <label class="kagami-compose-label" for="kagamiInput">Ask about the active Ponis IQ view</label>
+            <div class="kagami-compose-row">
+              <textarea
+                class="kagami-input"
+                id="kagamiInput"
+                rows="1"
+                maxlength="240"
+                placeholder="Ask PonisIQ about the current call, PTB, volatility, WR, or technical snapshot..."
+              ></textarea>
+              <button class="kagami-send" id="kagamiSend" type="submit">Send</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="kagami-side-stack">
+          <div class="kagami-panel kagami-context-card">
+            <div class="kagami-context-head">
+              <div>
+                <span class="kagami-card-kicker">Live Context</span>
+                <h2>Current Agent State</h2>
+              </div>
+              <span class="kagami-context-sync" id="kagamiContextSync">Syncing...</span>
+            </div>
+            <div class="kagami-context-grid">
+              <div class="kagami-context-item">
+                <span class="kagami-context-label">Timeframe</span>
+                <span class="kagami-context-value" id="kagamiContextTf">5 MIN</span>
+              </div>
+              <div class="kagami-context-item">
+                <span class="kagami-context-label">Mode</span>
+                <span class="kagami-context-value" id="kagamiContextMode">Live Bias</span>
+              </div>
+              <div class="kagami-context-item">
+                <span class="kagami-context-label">BTC</span>
+                <span class="kagami-context-value" id="kagamiContextPrice">--</span>
+              </div>
+              <div class="kagami-context-item">
+                <span class="kagami-context-label">PTB</span>
+                <span class="kagami-context-value" id="kagamiContextPtb">--</span>
+              </div>
+              <div class="kagami-context-item">
+                <span class="kagami-context-label">Spread</span>
+                <span class="kagami-context-value" id="kagamiContextSpread">--</span>
+              </div>
+              <div class="kagami-context-item">
+                <span class="kagami-context-label">Countdown</span>
+                <span class="kagami-context-value" id="kagamiContextCountdown">--:--</span>
+              </div>
+              <div class="kagami-context-item">
+                <span class="kagami-context-label">Signal</span>
+                <span class="kagami-context-value" id="kagamiContextSignal">--</span>
+              </div>
+              <div class="kagami-context-item">
+                <span class="kagami-context-label">Volatility</span>
+                <span class="kagami-context-value" id="kagamiContextVolatility">--</span>
+              </div>
+              <div class="kagami-context-item">
+                <span class="kagami-context-label">WR</span>
+                <span class="kagami-context-value" id="kagamiContextWr">--</span>
+              </div>
+              <div class="kagami-context-item">
+                <span class="kagami-context-label">Technical</span>
+                <span class="kagami-context-value" id="kagamiContextTechnical">--</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="kagami-panel kagami-map-card">
+            <span class="kagami-card-kicker">Section Map</span>
+            <h2>What PonisIQ can explain</h2>
+            <ul class="kagami-list">
+              <li>Current prediction, final vote state, confidence and lock timing.</li>
+              <li>PTB math, price spread, and why each timeframe has a different market window.</li>
+              <li>Volatility meter, RSI, MACD, EMA, VWAP and volume snapshot.</li>
+              <li>Track record, WR, streaks and what changes those numbers.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+<!-- Share Prediction Button -->
+  <button class="share-pred-btn" id="sharePredBtn" title="Share current prediction">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+  </button>
+
+  <!-- ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ Notification Bell ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ -->
+  <button class="notif-btn" id="notifBtn" title="Enable push notifications">
+    <svg id="notifIconOn" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+    <svg id="notifIconOff" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+  </button>
+
+  <!-- ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ Share Card Modal ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ -->
+  <div class="share-modal-overlay" id="shareModal" style="display:none;">
+    <div class="share-modal">
+      <button class="share-modal-close" id="shareModalClose">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <!-- Preview card -->
+      <div class="share-card" id="shareCard">
+        <div class="share-card-bg"></div>
+        <div class="share-card-content">
+          <div class="share-card-header">
+            <div class="share-card-logo">
+              <span class="share-card-brand">Ponis IQ</span>
+            </div>
+            <div class="share-card-tf" id="shareCardTf">5M</div>
+          </div>
+          <div class="share-card-main">
+            <div class="share-card-left">
+              <div class="share-card-vol" id="shareCardVol">-- VOLATILITY</div>
+              <div class="share-card-dir" id="shareCardDir">UP</div>
+            </div>
+            <div class="share-card-meta">
+              <div class="share-card-row">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                <span>PTB</span>
+                <span class="share-card-val" id="shareCardPtb">--</span>
+              </div>
+              <div class="share-card-row">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                <span>BTC</span>
+                <span class="share-card-val" id="shareCardPrice">--</span>
+              </div>
+              <div class="share-card-row">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <span>Confidence</span>
+                <span class="share-card-val" id="shareCardConf">--</span>
+              </div>
+              <div class="share-card-row">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span>Window</span>
+                <span class="share-card-val" id="shareCardTime">--</span>
+              </div>
+              <div class="share-card-row">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l2 2 4-4"/><path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9c1.66 0 3.21.45 4.53 1.24"/></svg>
+                <span>Result</span>
+                <span class="share-card-val share-card-result" id="shareCardResult">--</span>
+              </div>
+            </div>
+          </div>
+          <div class="share-card-footer">
+
+            <span class="share-card-tag">AI-POWERED PREDICTION</span>
+          </div>
+        </div>
+      </div>
+      <!-- Actions -->
+      <div class="share-actions">
+        <button class="share-action-btn share-twitter" id="shareTwitterBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          Open X + Copy Image
+        </button>
+        <button class="share-action-btn share-copy" id="shareCopyBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copy Text
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ Community Chat Widget ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ -->
+  <div class="chat-widget" id="chatWidget">
+    <div class="chat-toggle" id="chatToggle">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span>Community</span>
+      <span class="chat-unread" id="chatUnread" style="display:none;">0</span>
+    </div>
+    <div class="chat-panel" id="chatPanel" style="display:none;">
+      <div class="chat-header">
+        <span class="chat-title">💬 Community Chat</span>
+        <span class="chat-online" id="chatOnline">● Live</span>
+        <button class="chat-close" id="chatClose">✕</button>
+      </div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="chat-loading">Loading messages...</div>
+      </div>
+      <div class="chat-input-row">
+        <input type="text" class="chat-input" id="chatInput" placeholder="Say something..." maxlength="200" autocomplete="off" />
+        <button class="chat-send" id="chatSend">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ Coming Soon ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â Esports & Sports ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚ÂÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ -->
+  <section class="coming-soon-section" id="coming-soon">
+    <div class="container">
+      <div class="coming-soon-header">
+        <span class="coming-soon-eyebrow">EXPANDING SOON</span>
+        <h2 class="coming-soon-title">More Markets Coming</h2>
+        <p class="coming-soon-subtitle">Ponis IQ is expanding beyond crypto. AI-powered predictions for the world's biggest competitions.</p>
+      </div>
+
+      <div class="coming-soon-grid">
+
+        <!-- Esports -->
+        <div class="coming-soon-card">
+          <div class="cs-card-glow cs-glow-blue"></div>
+          <div class="cs-card-inner">
+            <div class="cs-icon-wrap cs-icon-blue">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="6" width="20" height="12" rx="3"/>
+                <path d="M12 12h.01M8 12h.01M16 12h.01"/>
+                <path d="M7 9v6M10 12H7"/>
+              </svg>
+            </div>
+            <div class="cs-content">
+              <span class="cs-badge">COMING SOON</span>
+              <h3 class="cs-title">Esports</h3>
+              <p class="cs-desc">Live match predictions for CS2, Valorant, League of Legends, Dota 2 and more — powered by real-time odds and AI analysis.</p>
+              <div class="cs-league-row">
+                <span class="cs-league-chip active">CS2</span>
+                <span class="cs-league-chip">Valorant</span>
+                <span class="cs-league-chip">LoL</span>
+                <span class="cs-league-chip">Dota 2</span>
+              </div>
+              <div class="cs-preview-board">
+                <div class="cs-preview-head">
+                  <span class="cs-preview-label">Upcoming Match Queue</span>
+                  <span class="cs-preview-state">Model Setup</span>
+                </div>
+                <div class="cs-match-list">
+                  <div class="cs-match">
+                    <div class="cs-match-top">
+                      <span class="cs-match-time">Today • 8:30 PM ET</span>
+                      <span class="cs-match-market">Match Winner</span>
+                    </div>
+                    <div class="cs-match-teams">
+                      <span>Team Spirit</span>
+                      <span>vs FaZe Clan</span>
+                    </div>
+                    <div class="cs-match-footer">
+                      <span class="cs-match-status">Prediction Card Pending</span>
+                      <span class="cs-match-note">BO3 • CS2</span>
+                    </div>
+                  </div>
+                  <div class="cs-match">
+                    <div class="cs-match-top">
+                      <span class="cs-match-time">Tomorrow • 6:00 PM ET</span>
+                      <span class="cs-match-market">Series Edge</span>
+                    </div>
+                    <div class="cs-match-teams">
+                      <span>Gen.G</span>
+                      <span>vs Paper Rex</span>
+                    </div>
+                    <div class="cs-match-footer">
+                      <span class="cs-match-status">Data Feed Linking</span>
+                      <span class="cs-match-note">BO5 • Valorant</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="cs-action-row">
+                <a class="cs-action-btn" href="https://x.com/PonisIQ" target="_blank" rel="noopener noreferrer">Notify Me</a>
+                <a class="cs-action-btn secondary" href="#about">Inside Ponis IQ</a>
+              </div>
+              <p class="cs-mini-note">Phase one focuses on pre-match winner calls, confidence, kickoff timer, and result tracking before live in-map markets.</p>
+            </div>
+            <div class="cs-status">
+              <div class="cs-status-dot"></div>
+              <span>In Development</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sports -->
+        <div class="coming-soon-card">
+          <div class="cs-card-glow cs-glow-amber"></div>
+          <div class="cs-card-inner">
+            <div class="cs-icon-wrap cs-icon-amber">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                <path d="M2 12h20"/>
+              </svg>
+            </div>
+            <div class="cs-content">
+              <span class="cs-badge cs-badge-amber">COMING SOON</span>
+              <h3 class="cs-title">Sports</h3>
+              <p class="cs-desc">AI-powered predictions for NBA, NFL, EPL, and more. Win/loss calls backed by live odds, player stats, and market sentiment.</p>
+              <div class="cs-league-row">
+                <span class="cs-league-chip active cs-league-chip-amber">NBA</span>
+                <span class="cs-league-chip">NFL</span>
+                <span class="cs-league-chip">EPL</span>
+                <span class="cs-league-chip">UFC</span>
+              </div>
+              <div class="cs-preview-board">
+                <div class="cs-preview-head">
+                  <span class="cs-preview-label">Upcoming Match Queue</span>
+                  <span class="cs-preview-state cs-preview-state-amber">Market Prep</span>
+                </div>
+                <div class="cs-match-list">
+                  <div class="cs-match">
+                    <div class="cs-match-top">
+                      <span class="cs-match-time">Friday • 7:30 PM ET</span>
+                      <span class="cs-match-market cs-match-market-amber">Moneyline</span>
+                    </div>
+                    <div class="cs-match-teams">
+                      <span>Lakers</span>
+                      <span>vs Celtics</span>
+                    </div>
+                    <div class="cs-match-footer">
+                      <span class="cs-match-status cs-match-status-amber">Schedule Feed Ready</span>
+                      <span class="cs-match-note">NBA • Pre-game</span>
+                    </div>
+                  </div>
+                  <div class="cs-match">
+                    <div class="cs-match-top">
+                      <span class="cs-match-time">Sunday • 4:25 PM ET</span>
+                      <span class="cs-match-market cs-match-market-amber">Win / Loss</span>
+                    </div>
+                    <div class="cs-match-teams">
+                      <span>Chiefs</span>
+                      <span>vs Bills</span>
+                    </div>
+                    <div class="cs-match-footer">
+                      <span class="cs-match-status cs-match-status-amber">Model Calibration</span>
+                      <span class="cs-match-note">NFL • Main Slate</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="cs-action-row">
+                <a class="cs-action-btn cs-action-btn-amber" href="https://x.com/PonisIQ" target="_blank" rel="noopener noreferrer">Notify Me</a>
+                <a class="cs-action-btn secondary" href="#about">Inside Ponis IQ</a>
+              </div>
+              <p class="cs-mini-note">Phase one focuses on simple moneyline-style calls, start-time windows, confidence, and historical WR before props or live-play markets.</p>
+            </div>
+            <div class="cs-status">
+              <div class="cs-status-dot cs-dot-amber"></div>
+              <span>In Development</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="coming-soon-footer">
+        <p>Want early access? <span class="cs-highlight">Join the waitlist</span> and be the first to know when new markets go live.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â angular top -->
+
+<!-- FAQ Section ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â sticky split -->
+  <section class="faq" id="faq">
+    <div class="container">
+      <div class="faq-split">
+        <div class="faq-sticky">
+          <h2 class="faq-title">FAQ</h2>
+          <p class="faq-intro">Everything you need to know about Ponis IQ, the BTC agent, and Ask PonisIQ.</p>
+        </div>
+        <div class="faq-list">
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>What is Ponis IQ?</span>
+              <svg class="faq-icon" viewBox="0 0 24 24" width="20" height="20"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
+            <div class="faq-answer">
+              <p>Ponis IQ is an AI-powered BTC prediction dashboard that tracks live price, PTB, timeframe windows, volatility, technical context, and performance history.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>How do I use the agent?</span>
+              <svg class="faq-icon" viewBox="0 0 24 24" width="20" height="20"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
+            <div class="faq-answer">
+              <p>Open the Ponis IQ Agent, choose a timeframe, and read the active call with PTB, countdown, confidence, volatility, and track-record context.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>What is Ask PonisIQ?</span>
+              <svg class="faq-icon" viewBox="0 0 24 24" width="20" height="20"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
+            <div class="faq-answer">
+              <p>Ask PonisIQ is the guided chat layer that explains the current prediction, PTB logic, volatility, technical snapshot, and win-rate metrics in plain language.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>What timeframes are supported?</span>
+              <svg class="faq-icon" viewBox="0 0 24 24" width="20" height="20"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
+            <div class="faq-answer">
+              <p>The dashboard supports 5M, 15M, and 1H BTC windows, each with its own PTB and timing logic.</p>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>What markets are coming next?</span>
+              <svg class="faq-icon" viewBox="0 0 24 24" width="20" height="20"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
+            <div class="faq-answer">
+              <p>Esports and sports prediction views are planned next, with simple win/loss calls, confidence, timing, and historical performance tracking.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#" class="logo">Ponis IQ</a>
+          <p class="footer-tagline">AI-powered BTC market intelligence.</p>
+        </div>
+        <div class="footer-nav">
+          <span class="footer-nav-label">Navigate</span>
+          <a href="#home">Home</a>
+          <a href="#about">About</a>
+          <a href="#stats">Ponis IQ Agent</a>
+          <a href="paper-trader.html" target="_blank" rel="noopener noreferrer">Ponis IQ Wallet</a>
+          <a href="#kagami">Ask PonisIQ</a>
+          <a href="#coming-soon">Markets Coming Soon</a>
+<a href="#faq">FAQ</a>
+        </div>
+        <div class="footer-social">
+          <span class="footer-nav-label">Connect</span>
+          <a href="https://x.com/PonisIQ" target="_blank" rel="noopener noreferrer">Twitter / X</a>
+          <a href="#">Discord</a></div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copy">&copy; 2026 Ponis IQ. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+  <!-- Back to top -->
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 15l-6-6-6 6"/></svg>
+  </button>
+
+  <!-- Mute toggle -->
+  <button class="mute-toggle" id="muteToggle" aria-label="Toggle sound effects">
+    <svg class="mute-icon-on" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+    <svg class="mute-icon-off" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+  </button>
+
+  <!-- Ethers.js for wallet interaction -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.9.0/ethers.umd.min.js"></script>
+  <!-- Supabase for agent data -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <!-- Component JS (load order matters) -->
+  <script src="js/navbar.js"></script>
+  <script src="js/faq.js"></script>
+  <script src="js/reveal.js"></script>
+  <script src="js/stats.js"></script>
+  <script src="js/agent-5m.js"></script>
+  <script src="js/agent-15m.js"></script>
+  <script src="js/agent-1h.js"></script>
+  <script src="js/agent-core.js"></script>
+  <script src="js/scroll.js"></script>
+</body>
+</html>

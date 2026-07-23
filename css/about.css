@@ -1,0 +1,243 @@
+/* ===== ABOUT ===== */
+
+.about {
+  padding: 140px 0 120px;
+  position: relative;
+  background: var(--bg);
+  background-image: url('../public/bg.png');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+
+.about::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.42);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.about .container {
+  position: relative;
+  z-index: 1;
+}
+
+.about-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.55fr);
+  gap: 22px;
+  align-items: start;
+}
+
+.about-overview,
+.about-side-card,
+.about-feature-card {
+  position: relative;
+  background: rgba(10, 18, 14, 0.92);
+  border: 1px solid rgba(223, 255, 229, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
+}
+
+.about-overview::before,
+.about-side-card::before,
+.about-feature-card::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: 18px;
+  height: 18px;
+  border-top: 1px solid rgba(223, 255, 229, 0.45);
+  border-left: 1px solid rgba(223, 255, 229, 0.45);
+}
+
+.about-overview::after,
+.about-side-card::after,
+.about-feature-card::after {
+  content: '';
+  position: absolute;
+  right: -1px;
+  bottom: -1px;
+  width: 18px;
+  height: 18px;
+  border-right: 1px solid rgba(223, 255, 229, 0.45);
+  border-bottom: 1px solid rgba(223, 255, 229, 0.45);
+}
+
+.about-overview {
+  grid-row: span 2;
+  padding: 34px 32px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.about-kicker,
+.about-side-label,
+.about-metric-label {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 10px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.about-kicker {
+  color: var(--gold);
+  background: rgba(223, 255, 229, 0.08);
+  border: 1px solid rgba(223, 255, 229, 0.18);
+}
+
+.about-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(34px, 4vw, 56px);
+  line-height: 1.08;
+  letter-spacing: 1.6px;
+  color: var(--text-bright);
+  text-transform: uppercase;
+}
+
+.about-copy {
+  margin: 0;
+  max-width: 640px;
+  font-size: 15px;
+  line-height: 1.9;
+  color: var(--text-secondary);
+}
+
+.about-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.about-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.about-metric {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 18px;
+  border: 1px solid rgba(255,255,255,0.05);
+  background: rgba(255,255,255,0.025);
+}
+
+.about-metric-label {
+  width: fit-content;
+  color: rgba(200,220,210,0.6);
+  background: transparent;
+  border: none;
+  padding: 0;
+  min-height: 0;
+}
+
+.about-metric-value {
+  font-family: var(--font-display);
+  font-size: clamp(18px, 2vw, 26px);
+  letter-spacing: 1px;
+  color: var(--text-bright);
+  text-transform: uppercase;
+}
+
+.about-side {
+  display: grid;
+  gap: 22px;
+}
+
+.about-side-card {
+  padding: 24px 22px;
+}
+
+.about-side-label {
+  color: rgba(200, 255, 0, 0.88);
+  background: rgba(200, 255, 0, 0.08);
+  border: 1px solid rgba(200, 255, 0, 0.18);
+}
+
+.about-side-text {
+  margin: 18px 0 0;
+  font-size: 13px;
+  line-height: 1.85;
+  color: rgba(200,220,210,0.72);
+}
+
+.about-feature-grid {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.about-feature-card {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 22px 20px;
+}
+
+.feature-icon {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(223, 255, 229, 0.1);
+  color: var(--gold);
+  border: 1px solid rgba(223, 255, 229, 0.2);
+}
+
+.about-feature-card h3 {
+  margin: 0 0 8px;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+  color: var(--text-bright);
+}
+
+.about-feature-card p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.75;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 1024px) {
+  .about-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .about-overview {
+    grid-row: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .about {
+    padding: 88px 0 68px;
+  }
+
+  .about-overview,
+  .about-side-card,
+  .about-feature-card {
+    padding: 22px 20px;
+  }
+
+  .about-metrics,
+  .about-feature-grid {
+    grid-template-columns: 1fr;
+  }
+}

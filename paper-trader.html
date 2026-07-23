@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>VANGUARD WALLET</title>
+  <meta name="description" content="A separate VANGUARD WALLET page with live BTC price, fixed capital, locked-vote trading controls, and automatic PNL tracking." />
+  <meta property="og:title" content="VANGUARD WALLET" />
+  <meta property="og:description" content="Run the VANGUARD WALLET in a separate page with live BTC price, fixed balance, and bot-vote gated trade controls." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://vanguardnft.io/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/png" sizes="32x32" href="public/favicon.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="public/favicon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="public/favicon.png" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/navbar.css" />
+  <link rel="stylesheet" href="css/footer.css" />
+  <link rel="stylesheet" href="css/paper-trader.css?v=3" />
+  
+  <link rel="stylesheet" href="css/shadcn-glass.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;600;700&family=Exo+2:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+</head>
+<body class="paper-page">
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html#home" class="logo"><img src="public/title.png" alt="VANGUARD" class="logo-img" /></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html#home">Home</a></li>
+        <li><a href="index.html#stats">Vanguard Agent</a></li>
+        <li><a href="paper-trader.html" class="active">VANGUARD WALLET</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+  <main class="paper-main">
+    <section class="paper-hero">
+      <div class="container">
+        <div class="paper-intro">
+          <div class="paper-topline">
+            <span class="paper-kicker">Separate Wallet Terminal</span>
+            <span class="paper-chip">Fixed Wallet: $50.00</span>
+          </div>
+          <h1 class="paper-title">VANGUARD WALLET</h1>
+          <p class="paper-copy">
+            A dedicated BTC wallet view that trades only when the final bot vote is locked for the active timeframe. The balance is fixed at $50, entry price is tracked per position, and PNL updates in real time after each trade. Scroll down to view the full wallet board and trade ledger.
+          </p>
+          <div class="paper-top-actions">
+            <a class="paper-link-btn" href="index.html#stats">Back to Vanguard Agent</a>
+            <a class="paper-link-btn paper-link-btn-ghost" href="paper-trader.html" target="_blank" rel="noopener noreferrer">Open in New Window</a>
+          </div>
+        </div>
+
+        <div class="paper-banner">
+          <div class="paper-banner-item">
+            <span class="paper-banner-label">Feed</span>
+            <span class="paper-banner-value" id="feedMode">Connecting</span>
+          </div>
+          <div class="paper-banner-item">
+            <span class="paper-banner-label">Mode</span>
+            <span class="paper-banner-value">Vote-Locked Trading</span>
+          </div>
+          <div class="paper-banner-item">
+            <span class="paper-banner-label">Wallet</span>
+            <span class="paper-banner-value">$50.00 Capital</span>
+          </div>
+
+        </div>
+
+        <div class="paper-grid">
+          <article class="paper-card paper-card-price">
+            <div class="paper-card-head">
+              <div>
+                <span class="paper-card-label">Current Price</span>
+                <h2>BTC / USDT</h2>
+              </div>
+              <span class="paper-card-meta" id="priceSource">REST fallback</span>
+            </div>
+            <div class="paper-price" id="currentPrice">$--</div>
+            <div class="paper-price-meta">
+              <span class="paper-price-change" id="priceChange">Waiting for first tick</span>
+              <span class="paper-price-time" id="lastUpdate">No update yet</span>
+            </div>
+          </article>
+
+          <article class="paper-card paper-card-wallet">
+            <div class="paper-card-head">
+              <div>
+                <span class="paper-card-label">Wallet</span>
+                <h2>VANGUARD WALLET</h2>
+              </div>
+            </div>
+            <div class="paper-metric-grid">
+              <div class="paper-metric">
+                <span class="paper-metric-label">Wallet Balance</span>
+                <span class="paper-metric-value" id="walletBalance">$50.00</span>
+              </div>
+              <div class="paper-metric">
+                <span class="paper-metric-label">Cash Free</span>
+                <span class="paper-metric-value" id="walletCash">$50.00</span>
+              </div>
+              <div class="paper-metric">
+                <span class="paper-metric-label">Margin In Play</span>
+                <span class="paper-metric-value" id="walletMargin">$0.00</span>
+              </div>
+              <div class="paper-metric">
+                <span class="paper-metric-label">Equity</span>
+                <span class="paper-metric-value" id="walletEquity">$50.00</span>
+              </div>
+            </div>
+            <div class="paper-pnl-row">
+              <span class="paper-pnl-label">PNL</span>
+              <span class="paper-pnl-value" id="walletPnl">$0.00</span>
+            </div>
+          </article>
+
+          <article class="paper-card paper-card-controls">
+            <div class="paper-card-head">
+              <div>
+                <span class="paper-card-label">Last Trade Info</span>
+                <h2>Automatic Execution</h2>
+              </div>
+              <span class="paper-card-meta">Bot-driven trades</span>
+            </div>
+
+            <div class="paper-vote-strip">
+              <div class="paper-vote-item">
+                <span class="paper-preview-label">Timeframe</span>
+                <span class="paper-preview-value" id="voteTimeframe">15M</span>
+              </div>
+              <div class="paper-vote-item">
+                <span class="paper-preview-label">Vote Status</span>
+                <span class="paper-preview-value" id="voteStatus">Loading</span>
+              </div>
+              <div class="paper-vote-item">
+                <span class="paper-preview-label">Final Vote</span>
+                <span class="paper-preview-value" id="voteDirection">--</span>
+              </div>
+              <div class="paper-vote-item">
+                <span class="paper-preview-label">Window</span>
+                <span class="paper-preview-value" id="voteWindow">--</span>
+              </div>
+            </div>
+
+            <div class="paper-preview-toggle">
+              <button class="paper-toggle-btn active" type="button" data-timeframe="5m">5M</button>
+              <button class="paper-toggle-btn" type="button" data-timeframe="15m">15M</button>
+              <button class="paper-toggle-btn" type="button" data-timeframe="1h">1H</button>
+            </div>
+
+            <div class="paper-preview-grid">
+              <div class="paper-preview-item">
+                <span class="paper-preview-label">Last Trade Type</span>
+                <span class="paper-preview-value" id="lastTradeType">--</span>
+              </div>
+              <div class="paper-preview-item">
+                <span class="paper-preview-label">Direction</span>
+                <span class="paper-preview-value" id="lastTradeDirection">--</span>
+              </div>
+              <div class="paper-preview-item">
+                <span class="paper-preview-label">Entry Price</span>
+                <span class="paper-preview-value" id="lastTradeEntry">$--</span>
+              </div>
+              <div class="paper-preview-item">
+                <span class="paper-preview-label">Result</span>
+                <span class="paper-preview-value" id="lastTradeResult">--</span>
+              </div>
+            </div>
+
+            <div class="paper-status" id="tradeStatus">Loading automatic trading system. Trades execute automatically on locked votes.</div>
+          </article>
+
+          <article class="paper-card paper-card-positions">
+            <div class="paper-card-head">
+              <div>
+                <span class="paper-card-label">Active Positions</span>
+                <h2>Position Tracker</h2>
+              </div>
+            </div>
+
+            <div class="paper-position-grid">
+              <section class="paper-position-card" id="positionUpCard">
+                <div class="paper-position-head">
+                  <h3 class="paper-position-title">UP Position</h3>
+                  <span class="paper-position-badge">UP Watch</span>
+                </div>
+                <div class="paper-position-row"><span class="paper-position-key">Average Entry</span><span class="paper-position-val" id="positionUpAvg">$--</span></div>
+                <div class="paper-position-row"><span class="paper-position-key">BTC Size</span><span class="paper-position-val" id="positionUpUnits">0.000000 BTC</span></div>
+                <div class="paper-position-row"><span class="paper-position-key">Margin</span><span class="paper-position-val" id="positionUpMargin">$0.00</span></div>
+                <div class="paper-position-row"><span class="paper-position-key">Unrealized PNL</span><span class="paper-position-val" id="positionUpPnl">$0.00</span></div>
+              </section>
+
+              <section class="paper-position-card" id="positionDownCard">
+                <div class="paper-position-head">
+                  <h3 class="paper-position-title">DOWN Position</h3>
+                  <span class="paper-position-badge">DOWN Watch</span>
+                </div>
+                <div class="paper-position-row"><span class="paper-position-key">Average Entry</span><span class="paper-position-val" id="positionDownAvg">$--</span></div>
+                <div class="paper-position-row"><span class="paper-position-key">BTC Size</span><span class="paper-position-val" id="positionDownUnits">0.000000 BTC</span></div>
+                <div class="paper-position-row"><span class="paper-position-key">Margin</span><span class="paper-position-val" id="positionDownMargin">$0.00</span></div>
+                <div class="paper-position-row"><span class="paper-position-key">Unrealized PNL</span><span class="paper-position-val" id="positionDownPnl">$0.00</span></div>
+              </section>
+            </div>
+          </article>
+
+          <article class="paper-card paper-card-history">
+            <div class="paper-history-head">
+              <div>
+                <span class="paper-card-label">Trade Ledger</span>
+                <h2>Recent Wallet Trades</h2>
+              </div>
+              <span class="paper-card-meta">Local wallet ledger</span>
+            </div>
+            <div class="paper-history-list" id="tradeHistory"></div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html#home" class="logo"><img src="public/title.png" alt="VANGUARD" class="logo-img" /></a>
+          <p class="footer-tagline">Separate VANGUARD WALLET terminal for the Vanguard market stack.</p>
+        </div>
+        <div class="footer-nav">
+          <span class="footer-nav-label">Navigate</span>
+          <a href="index.html#home">Home</a>
+          <a href="index.html#stats">Vanguard Agent</a>
+          <a href="paper-trader.html">VANGUARD WALLET</a>
+        </div>
+        <div class="footer-social">
+          <span class="footer-nav-label">Connect</span>
+          <a href="https://x.com/Kagami15738" target="_blank" rel="noopener noreferrer">Twitter / X</a>
+          <a href="#">Discord</a>
+          <a href="#">OpenSea</a>
+          <a href="#">Etherscan</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copy">&copy; 2026 Vanguard. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/navbar.js"></script>
+  <script src="js/vanguard-wallet.js?v=3"></script>
+</body>
+</html>

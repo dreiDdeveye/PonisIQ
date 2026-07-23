@@ -1,0 +1,312 @@
+/* Shadcn-inspired dark glassmorphism layer for Ponis IQ */
+:root {
+  --sh-background: 70 11% 7%;
+  --sh-foreground: 95 40% 96%;
+  --sh-primary: 73 100% 50%;
+  --sh-primary-foreground: 70 22% 8%;
+  --sh-muted: 96 18% 74%;
+  --sh-border: 0 0% 100%;
+  --glass-bg: rgba(24, 25, 23, 0.52);
+  --glass-bg-deep: rgba(8, 9, 8, 0.36);
+  --glass-bg-hover: rgba(36, 38, 35, 0.58);
+  --glass-border: rgba(255, 255, 255, 0.34);
+  --glass-border-soft: rgba(255, 255, 255, 0.16);
+  --glass-rim: rgba(255, 255, 255, 0.72);
+  --glass-lime: rgba(200, 255, 0, 0.50);
+  --glass-shadow: 0 34px 90px rgba(0, 0, 0, 0.58), inset 0 1px 0 rgba(255, 255, 255, 0.42), inset 0 -28px 70px rgba(255, 255, 255, 0.035);
+  --glass-shadow-hover: 0 42px 110px rgba(0, 0, 0, 0.68), inset 0 1px 0 rgba(255, 255, 255, 0.54), inset 0 -34px 80px rgba(255, 255, 255, 0.045);
+}
+
+html {
+  background: #090a09 !important;
+}
+
+body {
+  position: relative;
+  background:
+    radial-gradient(circle at 52% 22%, rgba(255, 255, 255, 0.055), transparent 28%),
+    radial-gradient(circle at 18% 6%, rgba(200, 255, 0, 0.10), transparent 24%),
+    linear-gradient(135deg, #050605 0%, #111210 48%, #080908 100%) !important;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: -8%;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    linear-gradient(132deg, transparent 0 8%, rgba(255,255,255,0.055) 8.2% 8.55%, transparent 8.8% 100%),
+    linear-gradient(38deg, transparent 0 15%, rgba(255,255,255,0.045) 15.2% 15.55%, transparent 15.8% 100%),
+    linear-gradient(155deg, rgba(255,255,255,0.045) 0 0.45%, transparent 0.7% 100%),
+    repeating-linear-gradient(142deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 148px),
+    repeating-linear-gradient(38deg, rgba(255,255,255,0.03) 0 1px, transparent 1px 180px),
+    conic-gradient(from 28deg at 14% 18%, #0a0b0a, #1c1d1b 19%, #070807 21%, #171816 34%, #090a09 36%, #20211f 51%, #080908 53%, #151614 68%, #050605 70%, #1a1b19 86%, #0a0b0a),
+    conic-gradient(from 212deg at 78% 42%, #070807, #20211f 16%, #0b0c0b 18%, #171816 34%, #050605 36%, #1b1c1a 54%, #080908 56%, #151614 72%, #070807);
+  background-size: 620px 620px, 520px 520px, 440px 440px, 260px 260px, 310px 310px, 720px 720px, 820px 820px;
+  background-position: 0 0, 80px 20px, 160px 120px, 0 0, 40px 90px, -120px -80px, 180px 80px;
+  filter: contrast(1.18) brightness(0.82);
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(255,255,255,0.10), transparent 18%),
+    radial-gradient(circle at 70% 65%, rgba(200,255,0,0.055), transparent 26%),
+    linear-gradient(180deg, rgba(0,0,0,0.20), rgba(0,0,0,0.44));
+}
+
+.hero,
+.about,
+.stats,
+.kagami-hero,
+.kagami-overview,
+.coming-soon-section,
+.faq {
+  background: transparent !important;
+}
+
+.footer {
+  background: rgba(10, 11, 10, 0.72) !important;
+  background-image: none !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.18) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 -20px 70px rgba(0,0,0,0.38) !important;
+  backdrop-filter: blur(28px) saturate(1.08) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(1.08) !important;
+}
+
+:is(
+  .about-shell,
+  .about-side-card,
+  .about-feature-card,
+  .agent-access-inner,
+  .agent-access-code-display,
+  .agent-code-received-row,
+  .agent-help-panel,
+  .agent-help-item,
+  .agent-overview-main,
+  .agent-overview-side,
+  .agent-card,
+  .agent-model-bar,
+  .agent-coming-soon-bar,
+  .agent-coming-soon-item,
+  .agent-ptb-distance,
+  .agent-ptb-distance-item,
+  .agent-model-perf-item,
+  .agent-final-pred,
+  .agent-current-pred,
+  .agent-call,
+  .agent-status-bar,
+  .agent-chart-container,
+  .agent-history-item,
+  .agent-ta-item,
+  .agent-stat,
+  .ws-indicator,
+  .kagami-panel,
+  .kagami-card,
+  .kagami-context-item,
+  .kagami-msg,
+  .kagami-bubble,
+  .faq-item,
+  .coming-soon-card,
+  .cs-card-inner,
+  .cs-preview-board,
+  .cs-match,
+  .coming-soon-footer,
+  .chat-panel,
+  .chat-header,
+  .chat-input-row,
+  .share-modal,
+  .share-card,
+  .paper-card,
+  .paper-position-card,
+  .roadmap-card,
+  .inside-vanguard-card,
+  .stat-card,
+  .mint-card,
+  .nft-card,
+  .arsenal-card,
+  .collection-stat,
+  .collection-intro,
+  .collection-controls,
+  .modal,
+  .nft-modal
+) {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 22% 12%, rgba(255,255,255,0.22), transparent 18%),
+    radial-gradient(circle at 78% 72%, rgba(255,255,255,0.10), transparent 22%),
+    linear-gradient(145deg, rgba(255,255,255,0.20), rgba(255,255,255,0.045) 42%, rgba(0,0,0,0.20)),
+    var(--glass-bg) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: 30px !important;
+  box-shadow: var(--glass-shadow), 0 0 0 1px rgba(255,255,255,0.08) !important;
+  backdrop-filter: blur(32px) saturate(1.04) contrast(1.04) !important;
+  -webkit-backdrop-filter: blur(32px) saturate(1.04) contrast(1.04) !important;
+}
+
+:is(
+  .agent-history-item,
+  .agent-ta-item,
+  .agent-stat,
+  .agent-model-perf-item,
+  .kagami-context-item,
+  .kagami-msg,
+  .kagami-bubble,
+  .cs-match,
+  .ws-indicator,
+  .chat-header,
+  .chat-input-row
+) {
+  border-radius: 18px !important;
+}
+
+:is(
+  .about-shell,
+  .about-side-card,
+  .about-feature-card,
+  .agent-card,
+  .agent-model-bar,
+  .agent-overview-main,
+  .agent-overview-side,
+  .kagami-panel,
+  .kagami-card,
+  .faq-item,
+  .coming-soon-card,
+  .cs-card-inner,
+  .share-card,
+  .paper-card,
+  .paper-position-card
+):hover {
+  background:
+    radial-gradient(circle at 22% 12%, rgba(255,255,255,0.27), transparent 19%),
+    radial-gradient(circle at 80% 74%, rgba(255,255,255,0.12), transparent 24%),
+    linear-gradient(145deg, rgba(255,255,255,0.24), rgba(255,255,255,0.06) 42%, rgba(0,0,0,0.18)),
+    var(--glass-bg-hover) !important;
+  border-color: rgba(255, 255, 255, 0.46) !important;
+  box-shadow: var(--glass-shadow-hover), 0 0 0 1px rgba(255,255,255,0.12), 0 0 42px rgba(200,255,0,0.09) !important;
+}
+
+:is(
+  .about-shell,
+  .about-side-card,
+  .about-feature-card,
+  .agent-card,
+  .kagami-panel,
+  .kagami-card,
+  .faq-item,
+  .coming-soon-card,
+  .share-card,
+  .roadmap-card,
+  .paper-card,
+  .paper-position-card
+)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  border: 1px solid rgba(255,255,255,0.42) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.48),
+    inset 14px 18px 46px rgba(255,255,255,0.055),
+    inset -18px -24px 54px rgba(0,0,0,0.26) !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+:is(
+  .about-shell,
+  .about-side-card,
+  .about-feature-card,
+  .agent-card,
+  .kagami-panel,
+  .kagami-card,
+  .faq-item,
+  .coming-soon-card,
+  .share-card,
+  .roadmap-card,
+  .paper-card,
+  .paper-position-card
+)::after {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    linear-gradient(120deg, rgba(255,255,255,0.20), transparent 28%),
+    radial-gradient(circle at 72% 18%, rgba(255,255,255,0.16), transparent 18%),
+    radial-gradient(circle at 32% 88%, rgba(200,255,0,0.12), transparent 26%) !important;
+  border: 0 !important;
+  opacity: 0.42 !important;
+  mix-blend-mode: screen;
+  transform: none !important;
+}
+
+:is(
+  .about-shell,
+  .about-side-card,
+  .about-feature-card,
+  .agent-card,
+  .kagami-panel,
+  .kagami-card,
+  .faq-item,
+  .coming-soon-card,
+  .share-card,
+  .roadmap-card,
+  .paper-card,
+  .paper-position-card
+) > * {
+  position: relative;
+  z-index: 1;
+}
+
+:is(input, textarea, .chat-input, .agent-access-input, .kagami-input) {
+  background: rgba(15, 16, 15, 0.42) !important;
+  border: 1px solid rgba(255,255,255,0.22) !important;
+  border-radius: 18px !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), inset 0 -12px 30px rgba(0,0,0,0.18) !important;
+  backdrop-filter: blur(20px) saturate(1.04) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(1.04) !important;
+}
+
+:is(.btn-ghost, .kagami-link-btn, .agent-tf-tab, .kagami-chip, .kagami-tf-btn, .share-twitter) {
+  background: rgba(18, 19, 18, 0.48) !important;
+  border: 1px solid rgba(255,255,255,0.22) !important;
+  border-radius: 999px !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), 0 14px 34px rgba(0,0,0,0.24) !important;
+  backdrop-filter: blur(18px) saturate(1.04) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(1.04) !important;
+}
+
+:is(.btn-accent, .agent-access-gen-btn, .kagami-send, .chat-send, .share-copy, .cs-action-btn, .agent-access-unlock-btn) {
+  border-radius: 999px !important;
+  box-shadow: 0 18px 42px rgba(200,255,0,0.18), inset 0 1px 0 rgba(255,255,255,0.28) !important;
+}
+
+.share-card-bg,
+.footer::before,
+.footer::after {
+  background-image: none !important;
+}
+/* Access gate removed */
+.agent-access-gate,
+#agentAccessGate {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+.agent-content-wrap,
+.agent-content-wrap.locked,
+#agentContentWrap.locked {
+  filter: none !important;
+  pointer-events: auto !important;
+  user-select: auto !important;
+}

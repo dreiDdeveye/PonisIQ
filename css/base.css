@@ -1,0 +1,458 @@
+/* ===== BASE ===== */
+/* Reset, :root variables, body, noise, scanlines, beams, embers, cursor-glow, .container */
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #10110d;
+  --bg-secondary: #171914;
+  --bg-glass: rgba(238, 248, 236, 0.10);
+  --bg-glass-solid: rgba(239, 247, 237, 0.16);
+  --gold: #c8ff00;
+  --gold-light: #e7ff9a;
+  --gold-dim: rgba(200, 255, 0, 0.14);
+  --gold-glow: rgba(200, 255, 0, 0.42);
+  --gold-border: rgba(200, 255, 0, 0.28);
+  --accent-cyan: #dfffe5;
+  --accent-cyan-dim: rgba(223, 255, 229, 0.12);
+  --text: #f4f8f0;
+  --text-bright: #ffffff;
+  --text-secondary: #dbe8d5;
+  --text-muted: #a9b8a4;
+  --border: rgba(200, 255, 0, 0.12);
+  --border-light: rgba(200, 255, 0, 0.28);
+  --radius: 2px;
+  --radius-lg: 3px;
+  --cut: 14px;
+  --cut-sm: 8px;
+  --font: 'Exo 2', sans-serif;
+  --font-display: 'Chakra Petch', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 90px;
+  cursor: none !important;
+}
+
+*, *::before, *::after {
+  cursor: none !important;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  font-weight: 400;
+}
+
+/* Noise */
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.01;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+/* Scanlines overlay */
+.scanlines {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 2px,
+    rgba(200, 255, 0, 0.008) 2px,
+    rgba(200, 255, 0, 0.008) 4px
+  );
+}
+
+/* Sweeping light beams */
+.light-beams {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.beam {
+  position: absolute;
+  width: 1px;
+  height: 200vh;
+  background: linear-gradient(180deg, transparent, rgba(200, 255, 0, 0.04) 20%, rgba(200, 255, 0, 0.08) 50%, rgba(200, 255, 0, 0.04) 80%, transparent);
+  transform-origin: top center;
+}
+
+.beam-1 {
+  left: 15%;
+  top: -50%;
+  transform: rotate(25deg);
+  animation: beamSweep 18s ease-in-out infinite;
+}
+
+.beam-2 {
+  left: 55%;
+  top: -50%;
+  transform: rotate(-15deg);
+  animation: beamSweep 22s ease-in-out infinite reverse;
+  animation-delay: -6s;
+  opacity: 0.6;
+}
+
+.beam-3 {
+  left: 80%;
+  top: -50%;
+  transform: rotate(10deg);
+  animation: beamSweep 26s ease-in-out infinite;
+  animation-delay: -12s;
+  opacity: 0.4;
+}
+
+@keyframes beamSweep {
+  0%, 100% { transform: rotate(-20deg) translateX(-100px); opacity: 0; }
+  15% { opacity: 1; }
+  50% { transform: rotate(20deg) translateX(100px); opacity: 0.7; }
+  85% { opacity: 1; }
+}
+
+/* Rising embers — square mecha particles */
+.embers {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.ember {
+  position: absolute;
+  bottom: -10px;
+  width: 3px;
+  height: 3px;
+  border-radius: 0;
+  background: var(--gold);
+  opacity: 0;
+  animation: emberRise linear infinite;
+  transform: rotate(45deg);
+  will-change: transform;
+}
+
+.ember-1  { left: 5%;  animation-duration: 12s; animation-delay: 0s; }
+.ember-2  { left: 15%; animation-duration: 16s; animation-delay: -2s; width: 2px; height: 2px; }
+.ember-3  { left: 28%; animation-duration: 14s; animation-delay: -5s; }
+.ember-4  { left: 38%; animation-duration: 18s; animation-delay: -8s; width: 2px; height: 2px; }
+.ember-5  { left: 50%; animation-duration: 13s; animation-delay: -3s; }
+.ember-6  { left: 62%; animation-duration: 17s; animation-delay: -10s; width: 4px; height: 4px; }
+.ember-7  { left: 72%; animation-duration: 15s; animation-delay: -1s; width: 2px; height: 2px; }
+.ember-8  { left: 82%; animation-duration: 19s; animation-delay: -7s; }
+.ember-9  { left: 90%; animation-duration: 14s; animation-delay: -4s; width: 2px; height: 2px; }
+.ember-10 { left: 42%; animation-duration: 20s; animation-delay: -12s; }
+.ember-11 { left: 22%; animation-duration: 16s; animation-delay: -9s; width: 4px; height: 4px; }
+.ember-12 { left: 75%; animation-duration: 15s; animation-delay: -6s; }
+
+@keyframes emberRise {
+  0% {
+    opacity: 0;
+    transform: translateY(0) translateX(0) rotate(45deg) scale(1);
+  }
+  5% { opacity: 0.7; }
+  40% {
+    opacity: 0.4;
+    transform: translateY(-40vh) translateX(20px) rotate(45deg) scale(0.8);
+  }
+  70% {
+    opacity: 0.2;
+    transform: translateY(-70vh) translateX(-15px) rotate(45deg) scale(0.5);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-105vh) translateX(10px) rotate(45deg) scale(0.2);
+  }
+}
+
+/* Cursor glow — angular */
+.cursor-glow {
+  position: fixed;
+  width: 600px;
+  height: 600px;
+  border-radius: 0;
+  background: radial-gradient(circle, rgba(200, 255, 0, 0.08) 0%, transparent 55%);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  transform: translate(-50%, -50%) rotate(45deg);
+  transition: opacity 0.4s ease;
+}
+
+.cursor-glow.visible {
+  opacity: 1;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Ponis IQ cleanup overrides */
+.hero,
+.about,
+.stats,
+.kagami-hero,
+.kagami-overview,
+.coming-soon-section,
+.faq,
+.footer {
+  background-image: none !important;
+}
+
+.hero::before,
+.hero::after,
+.hero-mesh,
+.noise-overlay,
+.scanlines,
+.light-beams,
+.embers,
+.cursor-glow,
+.cursor-trail,
+.preloader,
+.custom-cursor {
+  display: none !important;
+}
+
+.about::before,
+.about::after,
+.kagami-main::before,
+.collection-video-bg,
+.stats-video-bg,
+.hero-video-bg,
+.hero-particles {
+  display: none !important;
+  background: none !important;
+}
+/* Ponis IQ neon glass theme */
+html,
+*, *::before, *::after {
+  cursor: auto !important;
+}
+
+body {
+  background: #10110d;
+}
+
+.navbar,
+.footer,
+.agent-access-inner,
+.share-modal,
+.chat-panel,
+.chat-header,
+.chat-input-row {
+  background: rgba(17, 18, 14, 0.92) !important;
+  border-color: rgba(200, 255, 0, 0.22) !important;
+}
+
+.hero {
+  background:
+    linear-gradient(135deg, #11120e 0%, #171914 58%, #c8ff00 58%, #c8ff00 100%) !important;
+}
+
+.hero-title,
+.stats-title,
+.kagami-title,
+.faq-title,
+.coming-soon-title,
+.about-title {
+  color: #f8fff2;
+}
+
+.accent-gradient,
+.logo,
+.hero-badge,
+.agent-model-name,
+.kagami-badge,
+.share-card-brand {
+  color: #c8ff00 !important;
+  -webkit-text-fill-color: currentColor !important;
+  background: none !important;
+  text-shadow: 0 0 22px rgba(200, 255, 0, 0.24);
+}
+
+.btn-accent,
+.agent-access-gen-btn,
+.kagami-send,
+.chat-send,
+.share-copy,
+.cs-action-btn,
+.agent-access-unlock-btn {
+  background: #c8ff00 !important;
+  border-color: #c8ff00 !important;
+  color: #14150f !important;
+  box-shadow: 0 0 28px rgba(200, 255, 0, 0.18);
+}
+
+.btn-ghost,
+.kagami-link-btn,
+.agent-tf-tab,
+.kagami-chip,
+.kagami-tf-btn,
+.filter-tab,
+.share-twitter {
+  background: rgba(239, 247, 237, 0.08) !important;
+  border-color: rgba(200, 255, 0, 0.28) !important;
+  color: #dfffe5 !important;
+}
+
+.about-shell,
+.about-side-card,
+.about-feature-card,
+.agent-card,
+.agent-model-bar,
+.kagami-panel,
+.faq-item,
+.coming-soon-card,
+.cs-card-inner,
+.share-card,
+.agent-access-code-display,
+.agent-code-received-row {
+  background: rgba(239, 247, 237, 0.105) !important;
+  border-color: rgba(200, 255, 0, 0.20) !important;
+  box-shadow: 0 20px 70px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(18px) saturate(1.1);
+}
+
+input,
+textarea,
+.chat-input,
+.agent-access-input,
+.kagami-input {
+  background: rgba(239, 247, 237, 0.12) !important;
+  border-color: rgba(200, 255, 0, 0.24) !important;
+  color: #f8fff2 !important;
+}
+
+.hero-topline-text,
+.about-copy,
+.stats-subtitle,
+.kagami-copy,
+.faq-intro,
+.footer-tagline,
+.cs-desc,
+.kagami-stat-note {
+  color: rgba(244, 248, 240, 0.74) !important;
+}
+
+.agent-status-dot.connected,
+.agent-status-dot.live,
+.kagami-chat-status-dot,
+.cs-status-dot,
+.ws-dot.connected {
+  background: #c8ff00 !important;
+  box-shadow: 0 0 12px rgba(200, 255, 0, 0.68) !important;
+}
+/* Universal glassmorphism cards */
+.about-shell,
+.about-side-card,
+.about-feature-card,
+.agent-card,
+.agent-model-bar,
+.agent-help-panel,
+.agent-help-item,
+.agent-access-inner,
+.agent-access-code-display,
+.agent-code-received-row,
+.agent-history-item,
+.agent-final-pred,
+.agent-current-pred,
+.agent-ta-item,
+.agent-stat,
+.agent-model-perf-item,
+.kagami-panel,
+.kagami-card,
+.kagami-context-item,
+.kagami-msg,
+.kagami-bubble,
+.faq-item,
+.coming-soon-card,
+.cs-card-inner,
+.cs-preview-board,
+.cs-match,
+.chat-panel,
+.share-modal,
+.share-card,
+.paper-card,
+.paper-position-card,
+.roadmap-card,
+.inside-vanguard-card,
+.stat-card,
+.mint-card,
+.nft-card,
+.arsenal-card,
+.collection-stat,
+.collection-intro,
+.collection-controls,
+.modal,
+.nft-modal {
+  background: linear-gradient(135deg, rgba(248, 255, 244, 0.16), rgba(223, 255, 229, 0.07)) !important;
+  border: 1px solid rgba(200, 255, 0, 0.22) !important;
+  box-shadow:
+    0 24px 80px rgba(0, 0, 0, 0.30),
+    inset 0 1px 0 rgba(255, 255, 255, 0.20),
+    inset 0 -1px 0 rgba(200, 255, 0, 0.08) !important;
+  backdrop-filter: blur(22px) saturate(1.18) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(1.18) !important;
+}
+
+.about-shell::before,
+.about-side-card::before,
+.about-feature-card::before,
+.agent-card::before,
+.kagami-panel::before,
+.kagami-card::before,
+.faq-item::before,
+.coming-soon-card::before,
+.share-card::before,
+.roadmap-card::before,
+.mint-card::before,
+.nft-card::before,
+.arsenal-card::before {
+  border-color: rgba(255, 255, 255, 0.22) !important;
+}
+
+.about-shell::after,
+.about-side-card::after,
+.about-feature-card::after,
+.agent-card::after,
+.kagami-panel::after,
+.kagami-card::after,
+.faq-item::after,
+.coming-soon-card::after,
+.share-card::after,
+.roadmap-card::after,
+.mint-card::after,
+.nft-card::after,
+.arsenal-card::after {
+  border-color: rgba(200, 255, 0, 0.18) !important;
+}
+
+.footer {
+  background: rgba(17, 18, 14, 0.90) !important;
+  background-image: none !important;
+  border-top: 1px solid rgba(200, 255, 0, 0.20) !important;
+  backdrop-filter: blur(22px) saturate(1.12) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(1.12) !important;
+}

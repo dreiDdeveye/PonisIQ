@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ask PonisIQ | Ponis IQ</title>
+  <meta name="description" content="Ask PonisIQ is Ponis IQ's market assistant for BTC context, dashboard explanations, and guided trade Q&A." />
+  <meta property="og:title" content="Ask PonisIQ | Ponis IQ" />
+  <meta property="og:description" content="A dedicated page for the Ask PonisIQ market assistant." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/png" sizes="32x32" href="public/favicon.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="public/favicon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="public/favicon.png" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/navbar.css" />
+  <link rel="stylesheet" href="css/footer.css" />
+  <link rel="stylesheet" href="css/kagami.css" />
+  
+  <link rel="stylesheet" href="css/shadcn-glass.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;600;700&family=Exo+2:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+</head>
+<body class="kagami-page">
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html#home" class="logo">Ponis IQ</a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html#home">Home</a></li>
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="paper-trader.html">Ponis IQ Wallet</a></li>
+        <li><a href="ask-kagami.html" class="active">Ask PonisIQ</a></li>
+        <li><a href="index.html#stats">Ponis IQ Agent</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="kagami-main">
+    <section class="kagami-hero">
+      <div class="container">
+        <div class="kagami-hero-grid">
+          <div class="kagami-panel kagami-intro">
+            <span class="kagami-kicker">Chat Bot</span>
+            <h1 class="kagami-title">Ask PonisIQ</h1>
+            <p class="kagami-copy">A dedicated page for Ponis IQ's market assistant. This will handle BTC questions, dashboard explanations, and quick trade context without mixing into the main agent layout.</p>
+            <div class="kagami-actions">
+              <span class="kagami-badge">Coming Soon</span>
+              <a class="kagami-link-btn" href="index.html#stats">Back to Agent</a>
+            </div>
+            <div class="kagami-tags">
+              <span class="kagami-tag">Market Q&amp;A</span>
+              <span class="kagami-tag">BTC Context</span>
+              <span class="kagami-tag">Dashboard Help</span>
+            </div>
+          </div>
+
+          <div class="kagami-side">
+            <div class="kagami-panel kagami-stat">
+              <span class="kagami-stat-label">Status</span>
+              <span class="kagami-stat-value">In Build</span>
+              <span class="kagami-stat-note">UI and response flow are being prepared.</span>
+            </div>
+            <div class="kagami-panel kagami-stat">
+              <span class="kagami-stat-label">Focus</span>
+              <span class="kagami-stat-value">BTC Only</span>
+              <span class="kagami-stat-note">Aligned with the live Ponis IQ dashboard.</span>
+            </div>
+            <div class="kagami-panel kagami-stat">
+              <span class="kagami-stat-label">Mode</span>
+              <span class="kagami-stat-value">Guided</span>
+              <span class="kagami-stat-note">Fast answers around signals, trend and market state.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="kagami-overview">
+      <div class="container">
+        <div class="kagami-card-grid">
+          <article class="kagami-card">
+            <span class="kagami-card-kicker">Use Case</span>
+            <h2>What this page will do</h2>
+            <ul class="kagami-list">
+              <li>Explain current prediction, volatility and confidence.</li>
+              <li>Answer quick BTC market questions in plain language.</li>
+              <li>Translate dashboard data into trade context.</li>
+            </ul>
+          </article>
+
+          <article class="kagami-card">
+            <span class="kagami-card-kicker">Interface</span>
+            <h2>Planned layout</h2>
+            <ul class="kagami-list">
+              <li>Dedicated chat area with suggested prompts.</li>
+              <li>Fast action chips for PTB, WR, trend and lock status.</li>
+              <li>Side panel for live BTC context from Ponis IQ Agent.</li>
+            </ul>
+          </article>
+
+          <article class="kagami-card kagami-preview">
+            <span class="kagami-card-kicker">Preview</span>
+            <h2>Mock conversation</h2>
+            <div class="kagami-chat">
+              <div class="kagami-msg kagami-msg-user">What does the current 5m call mean?</div>
+              <div class="kagami-msg kagami-msg-bot">PonisIQ will explain direction, confidence, lock timing and whether the market is trending or ranging.</div>
+              <div class="kagami-msg kagami-msg-user">Why is PTB different on 15m?</div>
+              <div class="kagami-msg kagami-msg-bot">PonisIQ will map each timeframe to its own market window and start price.</div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html#home" class="logo">Ponis IQ</a>
+          <p class="footer-tagline">Ask PonisIQ preview page.</p>
+        </div>
+        <div class="footer-nav">
+          <span class="footer-nav-label">Navigate</span>
+          <a href="index.html#home">Home</a>
+          <a href="index.html#about">Roadmap</a>
+          <a href="index.html#stats">Ponis IQ Agent</a>
+          <a href="paper-trader.html">Ponis IQ Wallet</a>
+          <a href="ask-kagami.html">Ask PonisIQ</a>
+        </div>
+        <div class="footer-social">
+          <span class="footer-nav-label">Connect</span>
+          <a href="https://x.com/PonisIQ" target="_blank" rel="noopener noreferrer">Twitter / X</a>
+          <a href="#">Discord</a></div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copy">&copy; 2026 Ponis IQ. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/navbar.js"></script>
+</body>
+</html>
