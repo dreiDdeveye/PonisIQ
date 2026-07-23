@@ -276,6 +276,7 @@
       subtitle:    'Live BTC 5-minute predictions powered by AI + on-chain data.',
       modelDetail: '5-min BTC Prediction',
       slugPrefix:  'btc-updown-5m-',
+      initialRecord: { wins: 3266, losses: 404 },
     },
     '15m': {
       label:       '15 MIN',
@@ -290,6 +291,7 @@
       subtitle:    'Live BTC 15-minute predictions powered by AI + on-chain data.',
       modelDetail: '15-min BTC Prediction',
       slugPrefix:  'btc-updown-15m-',
+      initialRecord: { wins: 3009, losses: 531 },
     },
     '1h': {
       label:       '1 HOUR',
@@ -304,12 +306,14 @@
       subtitle:    'Live BTC 1-hour predictions powered by AI + on-chain data.',
       modelDetail: '1-Hour BTC Prediction',
       slugPrefix:  'btc-updown-1h-',
+      initialRecord: { wins: 1857, losses: 493 },
     },
   };
 
   function mergeTimeframeConfig(defaultCfg, overrideCfg) {
     const merged = Object.assign({}, defaultCfg || {}, overrideCfg || {});
     merged.timing = Object.assign({}, (defaultCfg && defaultCfg.timing) || {}, (overrideCfg && overrideCfg.timing) || {});
+    merged.initialRecord = Object.assign({}, (defaultCfg && defaultCfg.initialRecord) || {}, (overrideCfg && overrideCfg.initialRecord) || {});
     merged.historySources = Array.isArray((overrideCfg && overrideCfg.historySources))
       ? overrideCfg.historySources.slice()
       : Array.isArray((defaultCfg && defaultCfg.historySources))
@@ -333,6 +337,22 @@
 
   const TF_CONFIG = buildTimeframeConfig(globalCfg.timeframes || {});
 
+  function getInitialTrackRecord(tf) {
+    const cfg = TF_CONFIG[tf || activeTF] || {};
+    const initial = cfg.initialRecord || {};
+    return {
+      wins: Number(initial.wins) || 0,
+      losses: Number(initial.losses) || 0,
+    };
+  }
+
+  function addTrackRecordDelta(base, delta) {
+    return {
+      wins: (Number(base && base.wins) || 0) + (Number(delta && delta.wins) || 0),
+      losses: (Number(base && base.losses) || 0) + (Number(delta && delta.losses) || 0),
+    };
+  }
+
   function getHistorySources(tf) {
     const cfg = TF_CONFIG[tf] || {};
     const sources = [];
@@ -352,6 +372,57 @@
   }
 
   let activeTF = globalCfg.defaultTF || '5m';
+  const trackRecordByTF = {};
+
+  function getTrackRecordState(tf) {
+    const targetTF = tf || activeTF;
+    if (!trackRecordByTF[targetTF]) {
+      const initial = getInitialTrackRecord(targetTF);
+      trackRecordByTF[targetTF] = {
+        wins: initial.wins,
+        losses: initial.losses,
+        initialized: false,
+        seen: {},
+      };
+    }
+    return trackRecordByTF[targetTF];
+  }
+
+  function getSettledTrackResult(p) {
+    if (!p || isSkipEntry(p)) return null;
+    if (p.end_price === null || p.end_price === undefined || p.ptb === null || p.ptb === undefined) return null;
+    const correct = parseStoredBool(p.over);
+    if (correct === null) return null;
+    return correct ? 'WIN' : 'LOSS';
+  }
+
+  function getSettledTrackKey(p) {
+    return [p.id || '', p.ts || '', p.source || '', p.created_at || ''].join(':');
+  }
+
+  function syncTrackRecordFromHistory(predictions, tf) {
+    const record = getTrackRecordState(tf);
+    if (!Array.isArray(predictions)) {
+      updateStatsUI(record);
+      return record;
+    }
+
+    predictions.forEach(function(p) {
+      const result = getSettledTrackResult(p);
+      if (!result) return;
+      const key = getSettledTrackKey(p);
+      if (record.seen[key]) return;
+      record.seen[key] = true;
+      if (record.initialized) {
+        if (result === 'WIN') record.wins++;
+        else record.losses++;
+      }
+    });
+
+    record.initialized = true;
+    updateStatsUI(record);
+    return record;
+  }
 
   function getWindowStart(timestampSecs, tf) {
     const targetTF = tf || activeTF;
@@ -422,8 +493,6 @@
     state.currentWindowStart = 0;
     state.upPct              = null;
     state.downPct            = null;
-    state.wins               = 0;
-    state.losses             = 0;
     state.history            = [];
     lastHistorySnapshot      = '';
 
@@ -434,10 +503,7 @@
     if (els.ptb)            els.ptb.textContent              = '--';
     if (els.countdown)      els.countdown.textContent        = '--:--';
     if (els.finalCountdown) els.finalCountdown.textContent   = '--:--';
-    if (els.wins)           els.wins.textContent             = '--';
-    if (els.losses)         els.losses.textContent           = '--';
-    if (els.winRate)        els.winRate.textContent          = '--%';
-    if (els.total)          els.total.textContent            = '--';
+    updateStatsUI(getTrackRecordState(tf));
 
     // Reset streak displays
     if (els.allWinStreak)  els.allWinStreak.textContent  = '--';
@@ -1363,7 +1429,7 @@
     return p.source.endsWith('-skip') || p.source === 'vanguard-skip';
   }
 
-  function computeTrackRecord(predictions) {
+  function computeTrackRecord(predictions, tf) {
     let wins = 0, losses = 0;
     for (const p of predictions) {
       if (isSkipEntry(p)) continue;
@@ -1373,7 +1439,7 @@
       if (correct) wins++;
       else losses++;
     }
-    return { wins, losses };
+    return addTrackRecordDelta(getInitialTrackRecord(tf), { wins, losses });
   }
 
   // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
@@ -1633,10 +1699,10 @@
 
   function updateStatsUI(record) {
     if (!record) return;
-    state.wins = record.wins || 0;
-    state.losses = record.losses || 0;
+    state.wins = Number(record.wins) || 0;
+    state.losses = Number(record.losses) || 0;
     const total = state.wins + state.losses;
-    const wr = total > 0 ? ((state.wins / total) * 100).toFixed(2) : '0.00';
+    const wr = total > 0 ? Math.round((state.wins / total) * 100) : 0;
 
     if (els.wins) els.wins.textContent = state.wins;
     if (els.losses) els.losses.textContent = state.losses;
@@ -2917,8 +2983,7 @@
       var snapshot = getHistorySnapshot(history);
       if (!history || snapshot === lastHistorySnapshot) return;
       updateHistoryUI(history);
-      var record = computeTrackRecord(history);
-      updateStatsUI(record);
+      syncTrackRecordFromHistory(history, activeTF);
     } catch (e) {}
   }
 
@@ -2962,13 +3027,10 @@
         console.log('[AGENT] History rendered OK');
       } catch (e) { console.error('[AGENT] History render error:', e); }
 
-      // Track record â€” always compute fresh from history data
+      // Track record starts from the configured baseline, then consumes unseen settled rows.
       try {
-        if (history && history.length > 0) {
-          const record = computeTrackRecord(history);
-          console.log('[AGENT] Track record from history:', record.wins, 'W', record.losses, 'L', '/', history.length, 'total');
-          updateStatsUI(record);
-        }
+        const record = syncTrackRecordFromHistory(history || [], activeTF);
+        console.log('[AGENT] Track record:', record.wins, 'W', record.losses, 'L', '/', history ? history.length : 0, 'history rows tracked');
       } catch (e) { console.error('[AGENT] Stats render error:', e); }
 
       // Update price vs PTB display
@@ -3087,6 +3149,7 @@
     agentStarted = true;
     setStatus('connecting', 'CONNECTING...');
     setWsIndicator('reconnecting', 'CONNECTING');
+    updateStatsUI(getTrackRecordState(activeTF));
     loadChartHistory();
     connectRTDS();
     refresh();

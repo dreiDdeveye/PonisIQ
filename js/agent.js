@@ -20,6 +20,7 @@
       subtitle:    'Live BTC 5-minute predictions powered by AI + on-chain data.',
       modelDetail: '5-min BTC Prediction',
       slugPrefix:  'btc-updown-5m-',
+      initialRecord: { wins: 3266, losses: 404 },
     };
   }
 
@@ -37,6 +38,7 @@
       subtitle:    'Live BTC 15-minute predictions powered by AI + on-chain data.',
       modelDetail: '15-min BTC Prediction',
       slugPrefix:  'btc-updown-15m-',
+      initialRecord: { wins: 3009, losses: 531 },
     };
   }
 
@@ -54,6 +56,7 @@
       subtitle:    'Live BTC 1-hour predictions powered by AI + on-chain data.',
       modelDetail: '1-Hour BTC Prediction',
       slugPrefix:  'btc-updown-1h-',
+      initialRecord: { wins: 1857, losses: 493 },
     };
   }
 
