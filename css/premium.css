@@ -1,0 +1,1121 @@
+/* Nemesis template-inspired black and white redesign */
+:root {
+  --bg: #000;
+  --bg-secondary: #050505;
+  --surface: rgba(255, 255, 255, 0.055);
+  --surface-strong: rgba(255, 255, 255, 0.09);
+  --surface-soft: rgba(255, 255, 255, 0.03);
+  --line: rgba(255, 255, 255, 0.12);
+  --line-strong: rgba(255, 255, 255, 0.24);
+  --text: #f7f7f7;
+  --text-bright: #fff;
+  --text-secondary: rgba(255, 255, 255, 0.72);
+  --text-muted: rgba(255, 255, 255, 0.48);
+  --gold: #fff;
+  --gold-light: #fff;
+  --gold-dim: rgba(255, 255, 255, 0.08);
+  --gold-glow: rgba(255, 255, 255, 0.14);
+  --gold-border: rgba(255, 255, 255, 0.2);
+  --accent-cyan: #d8d8d8;
+  --accent-cyan-dim: rgba(255, 255, 255, 0.07);
+  --border: rgba(255, 255, 255, 0.12);
+  --border-light: rgba(255, 255, 255, 0.22);
+  --radius: 8px;
+  --radius-lg: 8px;
+  --cut: 0;
+  --cut-sm: 0;
+}
+
+html,
+*, *::before, *::after {
+  cursor: auto !important;
+}
+
+body {
+  background:
+    radial-gradient(circle at 50% -12%, rgba(255,255,255,0.18), transparent 34rem),
+    radial-gradient(circle at 92% 18%, rgba(255,255,255,0.08), transparent 24rem),
+    linear-gradient(180deg, #000 0%, #050505 48%, #000 100%);
+  color: var(--text);
+}
+
+.noise-overlay,
+.scanlines,
+.light-beams,
+.embers,
+.cursor-glow,
+.custom-cursor,
+.cursor-trail,
+.hero-header-image-wrap,
+.hud-float,
+.cs-card-glow,
+.hero-mesh,
+.hero-video-bg,
+.hero-particles,
+.about::before,
+.about::after,
+.stats::before,
+.stats::after,
+.hero::after,
+.kagami-panel::before,
+.kagami-panel::after,
+.kagami-card::before,
+.kagami-card::after,
+.about-overview::before,
+.about-overview::after,
+.about-side-card::before,
+.about-side-card::after,
+.about-feature-card::before,
+.about-feature-card::after,
+.faq-item::before,
+.faq-item::after,
+.coming-soon-card::before,
+.coming-soon-card::after,
+.cs-card-inner::before,
+.cs-card-inner::after,
+.agent-card::before,
+.agent-card::after {
+  display: none !important;
+}
+
+.container,
+.hero-inner,
+.nav-container {
+  width: min(100% - 48px, 1180px);
+  max-width: none;
+  margin-inline: auto;
+  padding-inline: 0;
+}
+
+/* Classic premium SaaS top nav */
+.navbar {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 1000;
+  padding: 14px 0;
+  background: rgba(0, 0, 0, 0.76) !important;
+  border-bottom: 1px solid var(--line) !important;
+  backdrop-filter: blur(18px);
+}
+
+.navbar.scrolled,
+.navbar:hover {
+  padding: 10px 0;
+}
+
+.nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.logo {
+  color: #fff !important;
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-shadow: none !important;
+  writing-mode: horizontal-tb;
+}
+
+.nav-links,
+.navbar.scrolled .nav-links,
+.navbar:hover .nav-links,
+.navbar.scrolled .nav-actions,
+.navbar:hover .nav-actions {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-links a {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  padding: 0 12px;
+  border-radius: 8px;
+  color: rgba(255,255,255,0.62);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+
+.nav-links a::before,
+.nav-links a::after {
+  display: none;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  color: #000;
+  background: #fff;
+}
+
+/* Buttons */
+.btn,
+.kagami-link-btn,
+.kagami-send,
+.chat-send,
+.share-copy,
+.cs-action-btn,
+.agent-access-gen-btn,
+.agent-access-unlock-btn {
+  min-height: 44px;
+  border-radius: 8px !important;
+  clip-path: none !important;
+  font-family: var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  box-shadow: none !important;
+}
+
+.btn-accent,
+.kagami-send,
+.chat-send,
+.share-copy,
+.cs-action-btn,
+.agent-access-gen-btn,
+.agent-access-unlock-btn {
+  color: #000 !important;
+  background: #fff !important;
+  border: 1px solid #fff !important;
+}
+
+.btn-ghost,
+.kagami-link-btn,
+.agent-tf-tab,
+.kagami-chip,
+.kagami-tf-btn,
+.filter-tab,
+.share-twitter,
+.cs-action-btn.secondary {
+  color: #fff !important;
+  background: rgba(255,255,255,0.035) !important;
+  border: 1px solid var(--line) !important;
+}
+
+/* Hero: template style with product preview */
+.hero {
+  min-height: 100svh;
+  padding: 126px 0 72px;
+  display: grid;
+  align-items: center;
+  overflow: hidden;
+  background:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px),
+    #000 !important;
+  background-size: 86px 86px, 86px 86px, auto !important;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 84px 0 auto;
+  height: min(42vw, 520px);
+  pointer-events: none;
+  background: url('../public/bgimage.png') center / cover no-repeat;
+  opacity: 0.11;
+  filter: grayscale(1) contrast(1.35);
+  mask-image: linear-gradient(90deg, transparent, #000 18%, #000 82%, transparent);
+}
+
+.hero-inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 34px;
+}
+
+.hero-text {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+  align-items: center;
+  gap: 24px;
+}
+
+.hero-topline,
+.hero-buttons {
+  justify-content: center;
+}
+
+.hero-badge,
+.about-kicker,
+.kagami-kicker,
+.kagami-card-kicker,
+.kagami-stat-label,
+.cs-badge,
+.agent-model-label,
+.coming-soon-eyebrow {
+  display: inline-grid;
+  place-items: center;
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: 8px !important;
+  color: #000 !important;
+  background: #fff !important;
+  border: 1px solid #fff !important;
+  clip-path: none !important;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em !important;
+  text-transform: uppercase;
+  text-shadow: none !important;
+}
+
+.hero-badge::before {
+  display: none;
+}
+
+.hero-topline-text,
+.about-metric-label,
+.agent-card-label,
+.agent-status-text,
+.ws-indicator,
+.kagami-compose-label,
+.kagami-context-label,
+.footer-nav-label {
+  color: var(--text-muted) !important;
+  font-family: var(--font-mono);
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase;
+}
+
+.hero-title {
+  margin: 0;
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: clamp(68px, 14vw, 168px);
+  font-weight: 800;
+  line-height: 0.86;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  text-shadow: none;
+}
+
+.hero-desc {
+  max-width: 710px;
+  margin: 0 auto;
+  color: rgba(255,255,255,0.72);
+  font-size: clamp(18px, 1.55vw, 22px);
+  line-height: 1.62;
+}
+
+.hero-market-panel {
+  width: min(100%, 980px);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: linear-gradient(145deg, rgba(255,255,255,0.09), rgba(255,255,255,0.025));
+  box-shadow: 0 30px 90px rgba(0,0,0,0.44);
+  backdrop-filter: blur(18px);
+}
+
+.hero-panel-row {
+  display: grid;
+  gap: 8px;
+  padding: 24px;
+  border-right: 1px solid var(--line);
+}
+
+.hero-panel-row:last-of-type {
+  border-right: 0;
+}
+
+.hero-panel-row span {
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.hero-panel-row strong {
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: clamp(20px, 2.2vw, 32px);
+  letter-spacing: 0;
+  line-height: 1.05;
+  text-align: left;
+}
+
+.hero-panel-note {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 14px 20px;
+  border-top: 1px solid var(--line);
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* Shared sections */
+.about,
+.stats,
+.kagami-hero,
+.kagami-overview,
+.coming-soon-section,
+.faq,
+.footer {
+  position: relative;
+  background: transparent !important;
+  background-image: none !important;
+}
+
+.about,
+.stats,
+.coming-soon-section,
+.faq {
+  padding: 112px 0;
+}
+
+.kagami-hero {
+  padding: 112px 0 22px;
+}
+
+.kagami-overview {
+  padding: 0 0 112px;
+}
+
+.about-title,
+.stats-title,
+.kagami-title,
+.coming-soon-title,
+.faq-title,
+.agent-help-title {
+  color: #fff !important;
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0 !important;
+  text-shadow: none !important;
+  text-transform: uppercase;
+}
+
+.about-copy,
+.about-side-text,
+.about-feature-card p,
+.stats-subtitle,
+.kagami-copy,
+.kagami-stat-note,
+.kagami-list li,
+.cs-desc,
+.coming-soon-subtitle,
+.faq-intro,
+.faq-answer p,
+.footer-tagline,
+.footer-copy,
+.agent-help-copy,
+.agent-help-item-text {
+  color: var(--text-secondary) !important;
+}
+
+.about-overview,
+.about-side-card,
+.about-feature-card,
+.agent-card,
+.agent-model-bar,
+.agent-overview-main,
+.agent-overview-side,
+.kagami-panel,
+.kagami-card,
+.kagami-context-item,
+.kagami-bubble,
+.faq-item,
+.cs-card-inner,
+.cs-preview-board,
+.cs-match,
+.chat-panel,
+.share-modal,
+.share-card,
+.agent-status-bar,
+.ws-indicator,
+.agent-ptb-distance,
+.agent-ptb-distance-item,
+.agent-stat,
+.agent-model-perf-item,
+.agent-chart-container,
+.agent-help-panel,
+.agent-help-summary-item,
+.agent-help-flow-step,
+.agent-help-item {
+  border-radius: 8px !important;
+  background: linear-gradient(145deg, rgba(255,255,255,0.078), rgba(255,255,255,0.026)) !important;
+  border: 1px solid var(--line) !important;
+  box-shadow: none !important;
+  backdrop-filter: blur(18px) !important;
+  -webkit-backdrop-filter: blur(18px) !important;
+}
+
+/* About: recognizable template feature section */
+.about-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(320px, 0.45fr);
+  gap: 18px;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.about-overview {
+  grid-row: span 2;
+  min-height: 430px;
+  display: grid;
+  align-content: end;
+  gap: 22px;
+  padding: 38px;
+}
+
+.about-title {
+  max-width: 780px;
+  font-size: clamp(40px, 5.6vw, 76px);
+}
+
+.about-actions,
+.about-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.about-metric {
+  min-width: 150px;
+  padding: 14px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,0.035) !important;
+}
+
+.about-metric-value {
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 20px;
+  letter-spacing: 0;
+}
+
+.about-side {
+  display: grid;
+  gap: 18px;
+}
+
+.about-side-card,
+.about-feature-card {
+  padding: 22px;
+}
+
+.about-feature-grid {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.about-feature-card {
+  display: grid;
+  gap: 18px;
+  align-content: start;
+  min-height: 220px;
+}
+
+.feature-icon,
+.cs-icon-wrap {
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  color: #000 !important;
+  background: #fff !important;
+  border-color: #fff !important;
+}
+
+.about-feature-card h3,
+.cs-title,
+.kagami-chat-head h2,
+.kagami-context-head h2,
+.kagami-map-card h2 {
+  color: #fff !important;
+  font-family: var(--font-display);
+  letter-spacing: 0 !important;
+}
+
+/* Agent: product dashboard preview, clean template grid */
+.stats {
+  --agent-flat-bg: transparent;
+  --agent-flat-panel: rgba(255,255,255,0.055);
+  --agent-flat-panel-2: rgba(255,255,255,0.085);
+  --agent-flat-panel-3: rgba(255,255,255,0.035);
+  --agent-flat-border: rgba(255,255,255,0.12);
+  --agent-flat-border-strong: rgba(255,255,255,0.26);
+  --agent-flat-mint: #fff;
+  --agent-flat-sand: #fff;
+  --agent-flat-blue: #fff;
+  --agent-flat-red: #bfbfbf;
+  --agent-flat-text: #fff;
+  --agent-flat-soft: rgba(255,255,255,0.7);
+  --agent-flat-dim: rgba(255,255,255,0.45);
+}
+
+.stats .agent-overview {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.42fr);
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.stats .agent-overview-main,
+.stats .agent-overview-side {
+  padding: 26px;
+}
+
+.stats .agent-overview-main {
+  min-height: 240px;
+  justify-content: space-between;
+}
+
+.stats-title {
+  font-size: clamp(40px, 5.8vw, 78px) !important;
+}
+
+.stats .agent-model-bar {
+  margin: 0;
+  padding: 14px;
+  border-left: 1px solid var(--line) !important;
+}
+
+.stats .agent-tf-tabs {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.stats .agent-tf-tab {
+  min-height: 58px;
+  border-radius: 8px !important;
+}
+
+.stats .agent-tf-tab.active,
+.kagami-tf-btn.active {
+  color: #000 !important;
+  background: #fff !important;
+  border-color: #fff !important;
+}
+
+.stats .agent-dashboard {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-areas:
+    'price price price price prediction prediction prediction prediction stats stats stats stats'
+    'main main main main main main main side side side side side';
+  gap: 18px;
+  align-items: stretch;
+}
+
+.stats .agent-card {
+  padding: 22px;
+  border-left: 1px solid var(--line) !important;
+  border-top: 1px solid var(--line) !important;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.stats .agent-card:hover {
+  transform: none;
+  border-color: var(--line-strong) !important;
+}
+
+.stats .agent-card-price { grid-area: price; }
+.stats .agent-card-prediction { grid-area: prediction; }
+.stats .agent-card-stats { grid-area: stats; }
+.stats .agent-main-stack { grid-area: main; display: grid; grid-template-columns: 1.35fr 0.65fr; gap: 18px; }
+.stats .agent-side-stack { grid-area: side; display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+
+.stats .agent-price,
+.stats .agent-ptb-inline-value {
+  color: #fff;
+  font-size: clamp(34px, 5vw, 64px);
+  letter-spacing: 0 !important;
+}
+
+.stats .agent-call {
+  min-height: 86px;
+  display: grid;
+  place-items: center;
+  border-color: var(--line) !important;
+  background: rgba(255,255,255,0.04) !important;
+}
+
+.stats .agent-call-text,
+.stats .agent-final-pred-call,
+.stats .agent-stat-value,
+.stats .agent-model-perf-value {
+  color: #fff !important;
+  letter-spacing: 0 !important;
+}
+
+.stats .agent-card-price,
+.stats .agent-card-prediction,
+.stats .agent-card-stats,
+.stats .agent-card-ta,
+.stats .agent-card-model-perf,
+.stats .agent-card-chart,
+.stats .agent-card-history {
+  border-top: 1px solid var(--line) !important;
+}
+
+.stats .agent-chart-container {
+  height: 340px;
+}
+
+.stats .agent-final-pred,
+.stats .agent-call.call-up,
+.stats .agent-call.call-down,
+.stats .agent-call.call-neutral {
+  background: rgba(255,255,255,0.055) !important;
+  border-color: var(--line-strong) !important;
+}
+
+.stats .agent-odds-up,
+.stats .agent-odds-down,
+.vol-meter-fill {
+  background: #fff !important;
+}
+
+.stats .agent-odds-bar,
+.vol-meter-track {
+  background: rgba(255,255,255,0.14) !important;
+}
+
+.stats .call-up .agent-call-text,
+.stats .call-down .agent-call-text,
+.stats .call-neutral .agent-call-text,
+.stats .agent-stat-wins,
+.stats .agent-stat-losses,
+.stats .agent-stat-wr,
+.stats .agent-countdown,
+.stats .agent-model-status,
+.stats .agent-price-change.above,
+.stats .agent-price-change.below,
+.stats .agent-ptb-distance-status.above,
+.stats .agent-ptb-distance-status.below,
+.stats .cm-green,
+.stats .cm-red,
+.stats .cm-accent,
+.stats .agent-ta-val.bullish,
+.stats .agent-ta-val.bearish,
+.stats .agent-history-result.win,
+.stats .agent-history-result.loss,
+.stats .agent-history-dir.up,
+.stats .agent-history-dir.down {
+  color: #fff !important;
+}
+
+.ws-dot.connected,
+.agent-status-dot.connected,
+.kagami-chat-status-dot,
+.cs-status-dot {
+  background: #fff !important;
+  box-shadow: 0 0 0 5px rgba(255,255,255,0.08) !important;
+}
+
+/* Ask Nemesis */
+.kagami-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.42fr);
+  gap: 18px;
+}
+
+.kagami-intro {
+  min-height: 330px;
+  padding: 30px;
+  display: grid;
+  align-content: end;
+}
+
+.kagami-title {
+  font-size: clamp(42px, 6vw, 82px) !important;
+}
+
+.kagami-side {
+  display: grid;
+  gap: 18px;
+}
+
+.kagami-stat,
+.kagami-chat-shell,
+.kagami-map-card,
+.kagami-context-card {
+  padding: 22px;
+}
+
+.kagami-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+  gap: 18px;
+  align-items: stretch;
+}
+
+.kagami-chat-shell {
+  min-height: 690px;
+}
+
+.kagami-thread {
+  min-height: 360px;
+  max-height: 560px;
+}
+
+.kagami-input,
+.chat-input,
+.agent-access-input,
+input,
+textarea {
+  border-radius: 8px !important;
+  color: #fff !important;
+  background: rgba(0,0,0,0.5) !important;
+  border: 1px solid var(--line) !important;
+}
+
+.kagami-input::placeholder,
+.chat-input::placeholder {
+  color: rgba(255,255,255,0.36) !important;
+}
+
+.kagami-bubble-bot,
+.kagami-bubble-user {
+  background: rgba(255,255,255,0.045) !important;
+  border-color: var(--line) !important;
+}
+
+.kagami-tag,
+.kagami-badge,
+.kagami-context-sync,
+.kagami-chat-status,
+.cs-league-chip {
+  min-height: 32px;
+  border-radius: 8px !important;
+  color: rgba(255,255,255,0.72) !important;
+  background: rgba(255,255,255,0.035) !important;
+  border: 1px solid var(--line) !important;
+}
+
+.kagami-list li::before {
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  background: #fff;
+}
+
+/* Coming markets */
+.coming-soon-header {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.42fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: end;
+  margin-bottom: 24px;
+}
+
+.coming-soon-title {
+  font-size: clamp(40px, 5.8vw, 78px) !important;
+}
+
+.coming-soon-subtitle {
+  max-width: 580px;
+  margin: 0;
+}
+
+.coming-soon-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+
+.coming-soon-card {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+.cs-card-inner {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr) 160px;
+  gap: 20px;
+  align-items: stretch;
+  padding: 24px !important;
+}
+
+.cs-content {
+  display: grid;
+  gap: 14px;
+}
+
+.cs-title {
+  font-size: clamp(30px, 4vw, 54px);
+}
+
+.cs-preview-board {
+  padding: 16px;
+}
+
+.cs-status {
+  align-self: start;
+  justify-self: end;
+}
+
+.cs-highlight,
+.cs-preview-state,
+.cs-match-market,
+.cs-match-status,
+.cs-mini-note,
+.cs-league-chip.active,
+.footer a:hover {
+  color: #fff !important;
+}
+
+/* FAQ and footer */
+.faq-split {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.45fr) minmax(0, 1fr);
+  gap: 32px;
+}
+
+.faq-sticky {
+  position: sticky;
+  top: 96px;
+  align-self: start;
+}
+
+.faq-title {
+  font-size: clamp(48px, 8vw, 104px) !important;
+}
+
+.faq-item {
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.faq-question {
+  color: #fff;
+  padding: 22px;
+}
+
+.faq-answer {
+  padding-inline: 22px;
+}
+
+.footer {
+  padding: 42px 0;
+  border-top: 1px solid var(--line) !important;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 0.7fr;
+  gap: 24px;
+}
+
+.footer a {
+  color: rgba(255,255,255,0.58);
+}
+
+.share-pred-btn,
+.notif-btn,
+.back-to-top,
+.mute-toggle {
+  color: #000 !important;
+  background: #fff !important;
+  border: 1px solid #fff !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+}
+
+.agent-help-backdrop {
+  background: rgba(0,0,0,0.86);
+}
+
+.agent-help-close {
+  border-radius: 8px;
+  color: #fff;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--line);
+}
+
+@media (max-width: 1180px) {
+  .about-shell,
+  .stats .agent-overview,
+  .kagami-hero-grid,
+  .kagami-workspace,
+  .coming-soon-header,
+  .faq-split {
+    grid-template-columns: 1fr;
+  }
+
+  .about-overview {
+    grid-row: auto;
+  }
+
+  .about-feature-grid,
+  .stats .agent-side-stack,
+  .stats .agent-main-stack {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .stats .agent-dashboard {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas:
+      'price prediction'
+      'stats side'
+      'main main';
+  }
+
+  .cs-card-inner {
+    grid-template-columns: 72px minmax(0, 1fr);
+  }
+
+  .cs-status {
+    grid-column: 2;
+    justify-self: start;
+  }
+}
+
+@media (max-width: 820px) {
+  .navbar {
+    padding: 0;
+  }
+
+  .navbar.scrolled,
+  .navbar:hover {
+    padding: 0;
+  }
+
+  .nav-container {
+    width: min(100% - 32px, 1180px);
+    min-height: 72px;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .nav-links.active {
+    position: fixed;
+    top: 78px;
+    left: 16px;
+    right: 16px;
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 12px;
+    background: rgba(0,0,0,0.95) !important;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+  }
+
+  .nav-links a {
+    justify-content: center;
+    width: 100%;
+    min-height: 46px;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .hamburger span {
+    background: #fff;
+  }
+
+  .container,
+  .hero-inner,
+  .nav-container {
+    width: min(100% - 32px, 1180px);
+  }
+
+  .hero {
+    min-height: auto;
+    padding: 104px 0 64px;
+  }
+
+  .hero-title {
+    font-size: clamp(56px, 18vw, 94px);
+  }
+
+  .hero-market-panel,
+  .about-feature-grid,
+  .stats .agent-dashboard,
+  .stats .agent-side-stack,
+  .stats .agent-main-stack,
+  .kagami-context-grid,
+  .footer-grid,
+  .cs-card-inner {
+    grid-template-columns: 1fr;
+    grid-template-areas: none;
+  }
+
+  .hero-panel-row {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .about,
+  .stats,
+  .coming-soon-section,
+  .faq {
+    padding: 76px 0;
+  }
+
+  .kagami-hero {
+    padding-top: 76px;
+  }
+
+  .about-overview,
+  .about-side-card,
+  .about-feature-card,
+  .stats .agent-overview-main,
+  .stats .agent-overview-side,
+  .stats .agent-card,
+  .kagami-intro,
+  .kagami-stat,
+  .kagami-chat-shell,
+  .kagami-map-card,
+  .kagami-context-card,
+  .cs-card-inner {
+    padding: 18px !important;
+  }
+
+  .stats .agent-card-price,
+  .stats .agent-card-prediction,
+  .stats .agent-card-stats,
+  .stats .agent-side-stack,
+  .stats .agent-main-stack {
+    grid-area: auto;
+  }
+
+  .kagami-chat-shell {
+    min-height: 0;
+  }
+
+  .kagami-thread {
+    min-height: 320px;
+    max-height: 460px;
+  }
+
+  .kagami-compose-row {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .cs-status {
+    grid-column: auto;
+  }
+}

@@ -5,8 +5,6 @@
 
 -- Drop existing tables (order matters for dependencies)
 DROP TABLE IF EXISTS chart_prices CASCADE;
-DROP TABLE IF EXISTS paper_trader_trades CASCADE;
-DROP TABLE IF EXISTS paper_trader_sessions CASCADE;
 DROP TABLE IF EXISTS live_prediction CASCADE;
 DROP TABLE IF EXISTS prediction_stats CASCADE;
 DROP TABLE IF EXISTS predictions CASCADE;
@@ -69,67 +67,6 @@ CREATE TABLE chart_prices (
 -- Index for time-range queries
 CREATE INDEX idx_chart_prices_ts ON chart_prices (ts);
 
--- Separate wallet/session state for the paper trader
-CREATE TABLE paper_trader_sessions (
-  id                BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  user_id           TEXT NOT NULL,
-  timeframe         TEXT NOT NULL CHECK (timeframe IN ('5m', '15m', '1h')),
-  mode              TEXT NOT NULL DEFAULT 'paper_trader',
-  starting_balance  DOUBLE PRECISION NOT NULL DEFAULT 1000,
-  available_balance DOUBLE PRECISION NOT NULL DEFAULT 1000,
-  equity            DOUBLE PRECISION NOT NULL DEFAULT 1000,
-  allocation_pct    DOUBLE PRECISION NOT NULL DEFAULT 0.20,
-  total_trades      INT NOT NULL DEFAULT 0,
-  wins              INT NOT NULL DEFAULT 0,
-  losses            INT NOT NULL DEFAULT 0,
-  skips             INT NOT NULL DEFAULT 0,
-  win_rate          DOUBLE PRECISION NOT NULL DEFAULT 0,
-  realized_pnl      DOUBLE PRECISION NOT NULL DEFAULT 0,
-  unrealized_pnl    DOUBLE PRECISION NOT NULL DEFAULT 0,
-  last_result       TEXT,
-  last_action       TEXT,
-  last_signal       TEXT,
-  current_position  TEXT DEFAULT 'FLAT',
-  current_entry     DOUBLE PRECISION,
-  current_shares    DOUBLE PRECISION,
-  last_window_start BIGINT,
-  created_at        TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  updated_at        TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (user_id, timeframe)
-);
-
-CREATE INDEX idx_paper_trader_sessions_user_tf ON paper_trader_sessions (user_id, timeframe);
-
--- Separate trade ledger for each simulated paper trader execution
-CREATE TABLE paper_trader_trades (
-  id             BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  session_id     BIGINT REFERENCES paper_trader_sessions(id) ON DELETE CASCADE,
-  user_id        TEXT NOT NULL,
-  timeframe      TEXT NOT NULL CHECK (timeframe IN ('5m', '15m', '1h')),
-  window_start   BIGINT NOT NULL,
-  action         TEXT NOT NULL CHECK (action IN ('open', 'close', 'skip', 'reset')),
-  status         TEXT NOT NULL DEFAULT 'open' CHECK (status IN ('open', 'closed', 'skipped', 'reset')),
-  direction      TEXT CHECK (direction IN ('up', 'down')),
-  signal_source  TEXT DEFAULT 'bot_final_vote',
-  ptb            DOUBLE PRECISION,
-  entry_price    DOUBLE PRECISION,
-  exit_price     DOUBLE PRECISION,
-  btc_entry      DOUBLE PRECISION,
-  btc_exit       DOUBLE PRECISION,
-  shares         DOUBLE PRECISION,
-  margin_used    DOUBLE PRECISION,
-  pnl            DOUBLE PRECISION DEFAULT 0,
-  pnl_pct        DOUBLE PRECISION DEFAULT 0,
-  result         TEXT CHECK (result IN ('WIN', 'LOSS', 'OPEN', 'SKIP')),
-  note           TEXT,
-  opened_at      TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  closed_at      TIMESTAMPTZ,
-  created_at     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  UNIQUE (user_id, timeframe, window_start, action)
-);
-
-CREATE INDEX idx_paper_trader_trades_user_tf_window ON paper_trader_trades (user_id, timeframe, window_start DESC);
-CREATE INDEX idx_paper_trader_trades_session ON paper_trader_trades (session_id, created_at DESC);
 
 -- ═══════════════════════════════════════════
 -- 4. PREDICTION_STATS — Aggregated stats (optional, read-only)
@@ -186,8 +123,6 @@ CREATE INDEX idx_ws_metrics_ts ON ws_metrics (ts DESC);
 ALTER TABLE predictions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE live_prediction ENABLE ROW LEVEL SECURITY;
 ALTER TABLE chart_prices ENABLE ROW LEVEL SECURITY;
-ALTER TABLE paper_trader_sessions ENABLE ROW LEVEL SECURITY;
-ALTER TABLE paper_trader_trades ENABLE ROW LEVEL SECURITY;
 ALTER TABLE prediction_stats ENABLE ROW LEVEL SECURITY;
 ALTER TABLE track_records ENABLE ROW LEVEL SECURITY;
 ALTER TABLE history ENABLE ROW LEVEL SECURITY;
@@ -207,17 +142,6 @@ CREATE POLICY "anon_update_live" ON live_prediction FOR UPDATE TO anon USING (tr
 CREATE POLICY "anon_read_chart" ON chart_prices FOR SELECT TO anon USING (true);
 CREATE POLICY "anon_insert_chart" ON chart_prices FOR INSERT TO anon WITH CHECK (true);
 
--- Anon can manage paper trader sessions
-CREATE POLICY "anon_read_paper_trader_sessions" ON paper_trader_sessions FOR SELECT TO anon USING (true);
-CREATE POLICY "anon_insert_paper_trader_sessions" ON paper_trader_sessions FOR INSERT TO anon WITH CHECK (true);
-CREATE POLICY "anon_update_paper_trader_sessions" ON paper_trader_sessions FOR UPDATE TO anon USING (true);
-CREATE POLICY "anon_delete_paper_trader_sessions" ON paper_trader_sessions FOR DELETE TO anon USING (true);
-
--- Anon can manage paper trader trades
-CREATE POLICY "anon_read_paper_trader_trades" ON paper_trader_trades FOR SELECT TO anon USING (true);
-CREATE POLICY "anon_insert_paper_trader_trades" ON paper_trader_trades FOR INSERT TO anon WITH CHECK (true);
-CREATE POLICY "anon_update_paper_trader_trades" ON paper_trader_trades FOR UPDATE TO anon USING (true);
-CREATE POLICY "anon_delete_paper_trader_trades" ON paper_trader_trades FOR DELETE TO anon USING (true);
 
 -- Anon can read and insert track_records
 CREATE POLICY "anon_read_track_records" ON track_records FOR SELECT TO anon USING (true);

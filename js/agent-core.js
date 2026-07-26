@@ -1,5 +1,5 @@
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-// Ponis IQ Agent â€” Browser-side live BTC prediction dashboard
+// Nemesis Agent â€” Browser-side live BTC prediction dashboard
 // Connects to Polymarket RTDS, Binance, and Supabase
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
@@ -649,18 +649,18 @@
       .replace(/'/g, '&#39;');
   }
 
-  function isPonisIQFinalState() {
+  function isNemesisFinalState() {
     return !!(els.finalPred &&
       els.finalPred.style.display !== 'none' &&
       els.finalPred.classList.contains('is-visible'));
   }
 
-  function getPonisIQSnapshot() {
+  function getNemesisSnapshot() {
     const price = state.btcPrice;
     const ptb = state.priceToBeat;
     const diff = (price != null && ptb != null) ? (price - ptb) : null;
     const diffPct = (diff != null && ptb) ? ((diff / ptb) * 100) : null;
-    const finalState = isPonisIQFinalState();
+    const finalState = isNemesisFinalState();
     const overText = els.oddsOverPct ? els.oddsOverPct.textContent.trim() : 'UP --';
     const underText = els.oddsUnderPct ? els.oddsUnderPct.textContent.trim() : 'DOWN --';
     const volBadgeEl = document.getElementById('volLevelBadge');
@@ -719,14 +719,14 @@
     };
   }
 
-  function appendPonisIQMessage(role, text) {
+  function appendNemesisMessage(role, text) {
     if (!kagamiEls.messages) return;
     const bubble = document.createElement('div');
     const ts = new Date();
     bubble.className = 'kagami-bubble kagami-bubble-' + role;
     bubble.innerHTML =
       '<div class="kagami-bubble-meta">' +
-        '<span class="kagami-bubble-role">' + (role === 'user' ? 'Operator' : 'PonisIQ') + '</span>' +
+        '<span class="kagami-bubble-role">' + (role === 'user' ? 'Operator' : 'Nemesis') + '</span>' +
         '<span>' + ts.getHours().toString().padStart(2, '0') + ':' + ts.getMinutes().toString().padStart(2, '0') + '</span>' +
       '</div>' +
       '<div class="kagami-bubble-text">' + escapeHtml(text) + '</div>';
@@ -734,9 +734,9 @@
     kagamiEls.messages.scrollTop = kagamiEls.messages.scrollHeight;
   }
 
-  function buildPonisIQResponse(prompt) {
+  function buildNemesisResponse(prompt) {
     const q = (prompt || '').toLowerCase();
-    const snap = getPonisIQSnapshot();
+    const snap = getNemesisSnapshot();
     const priceText = formatPrice(snap.price);
     const ptbText = formatPrice(snap.ptb);
     const spreadText = snap.diff == null
@@ -770,7 +770,7 @@
         'Current ' + snap.timeframeLabel + ' PTB: ' + ptbText + '.\n' +
         'Current BTC: ' + priceText + '.\n' +
         'Spread: ' + spreadText + '.\n' +
-        'Use the timeframe buttons here or in Ponis IQ Agent to compare windows directly.';
+        'Use the timeframe buttons here or in Nemesis Agent to compare windows directly.';
     }
 
     if (q.includes('time') || q.includes('countdown') || q.includes('lock') || q.includes('final vote')) {
@@ -808,7 +808,7 @@
     }
 
     if (q.includes('share') || q.includes('x ') || q === 'x' || q.includes('post')) {
-      return 'Use the share button on the page to build the Ponis IQ share card.\n' +
+      return 'Use the share button on the page to build the Nemesis share card.\n' +
         'The share card uses the active timeframe, PTB, BTC price, volatility, confidence, and result state.\n' +
         'X text can be prefilled automatically, but browsers still cannot attach the generated image directly into X without user paste/upload.';
     }
@@ -819,7 +819,7 @@
 
   function updatekagamiContext() {
     if (!kagamiEls.tf) return;
-    const snap = getPonisIQSnapshot();
+    const snap = getNemesisSnapshot();
     const diffText = snap.diff == null
       ? '--'
       : ((snap.diff >= 0 ? 'UP ' : 'DOWN ') + '$' + Math.abs(snap.diff).toFixed(2) + ' | ' + (snap.diffPct >= 0 ? '+' : '-') + Math.abs(snap.diffPct).toFixed(2) + '%');
@@ -849,31 +849,31 @@
     }
   }
 
-  function handlePonisIQPrompt(prompt) {
+  function handleNemesisPrompt(prompt) {
     const text = (prompt || '').trim();
     if (!text) return;
-    appendPonisIQMessage('user', text);
+    appendNemesisMessage('user', text);
     if (kagamiEls.input) {
       kagamiEls.input.value = '';
       kagamiEls.input.style.height = '52px';
     }
     window.setTimeout(function() {
-      appendPonisIQMessage('bot', buildPonisIQResponse(text));
+      appendNemesisMessage('bot', buildNemesisResponse(text));
       updatekagamiContext();
     }, 140);
   }
 
-  function initPonisIQ() {
+  function initNemesis() {
     if (kagamiInitialized || !kagamiEls.messages || !kagamiEls.form) return;
     kagamiInitialized = true;
 
-    appendPonisIQMessage('bot', 'PonisIQ is live. Ask about the active timeframe, PTB, volatility, technical snapshot, or WR.');
-    appendPonisIQMessage('bot', 'Use the quick prompts or switch between 5M, 15M, and 1H here to inspect the current Ponis IQ state.');
+    appendNemesisMessage('bot', 'Nemesis is live. Ask about the active timeframe, PTB, volatility, technical snapshot, or WR.');
+    appendNemesisMessage('bot', 'Use the quick prompts or switch between 5M, 15M, and 1H here to inspect the current Nemesis state.');
     updatekagamiContext();
 
     kagamiEls.form.addEventListener('submit', function(event) {
       event.preventDefault();
-      handlePonisIQPrompt(kagamiEls.input ? kagamiEls.input.value : '');
+      handleNemesisPrompt(kagamiEls.input ? kagamiEls.input.value : '');
     });
 
     if (kagamiEls.input) {
@@ -886,14 +886,14 @@
       kagamiEls.input.addEventListener('keydown', function(event) {
         if (event.key === 'Enter' && !event.shiftKey) {
           event.preventDefault();
-          handlePonisIQPrompt(kagamiEls.input.value);
+          handleNemesisPrompt(kagamiEls.input.value);
         }
       });
     }
 
     document.querySelectorAll('[data-kagami-prompt]').forEach(function(btn) {
       btn.addEventListener('click', function() {
-        handlePonisIQPrompt(btn.dataset.kagamiPrompt || '');
+        handleNemesisPrompt(btn.dataset.kagamiPrompt || '');
       });
     });
 
@@ -904,7 +904,7 @@
           if (!targetTf || targetTf === activeTF) return;
           switchTimeframe(targetTf);
           updatekagamiContext();
-          appendPonisIQMessage('bot', 'Switched PonisIQ context to ' + (TF_CONFIG[targetTf] ? TF_CONFIG[targetTf].label : targetTf.toUpperCase()) + '.');
+          appendNemesisMessage('bot', 'Switched Nemesis context to ' + (TF_CONFIG[targetTf] ? TF_CONFIG[targetTf].label : targetTf.toUpperCase()) + '.');
         });
       });
     }
@@ -2339,7 +2339,7 @@
   // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
   // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-  // Ponis IQ SNIPER ENGINE
+  // Nemesis SNIPER ENGINE
   // High-probability setups only â€” fires 1:30 into window
   // Output: LONG / SHORT / NO TRADE
   // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
@@ -3162,7 +3162,7 @@
 
     // Init new features
     initAgentHelp();
-    initPonisIQ();
+    initNemesis();
     initShareBtn();
     initNotifBtn();
     initChat();
@@ -3368,7 +3368,7 @@
     const time  = data.timeStr || '--';
     const result = data.result || '--';
 
-    return `Ponis IQ AI â€” ${tf} BTC Prediction\n` +
+    return `Nemesis AI â€” ${tf} BTC Prediction\n` +
       `Volatility: ${vol}\n` +
       `Direction: ${dir}\n` +
       `PTB: ${ptb} | BTC: ${price}\n` +
@@ -3568,7 +3568,7 @@
 
     ctx.fillStyle = 'rgba(200,220,210,0.9)';
     ctx.font = '700 34px "Chakra Petch", sans-serif';
-    ctx.fillText('Ponis IQ', x0, y0);
+    ctx.fillText('Nemesis', x0, y0);
 
     const tf = (data.tf || '--').toString();
     ctx.font = '700 22px "JetBrains Mono", monospace';
@@ -3784,7 +3784,7 @@
     if (!notifEnabled || Notification.permission !== 'granted') return;
     const icon  = dir === 'UP' ? '\u25B2' : dir === 'DOWN' ? '\u25BC' : '-';
     try {
-      new Notification('Ponis IQ ' + tf + ' Prediction Locked', {
+      new Notification('Nemesis ' + tf + ' Prediction Locked', {
         body: icon + ' ' + dir + ' â€” Confidence: ' + conf + '\nBTC: ' + (state.btcPrice ? formatPrice(state.btcPrice) : '--'),
         icon: 'public/favicon.png',
         tag:  'ponis-iq-pred-' + tf,
@@ -3805,7 +3805,7 @@
           document.getElementById('notifIconOn').style.display  = 'block';
           document.getElementById('notifIconOff').style.display = 'none';
           // Confirm notification
-          new Notification('Ponis IQ Alerts Enabled', {
+          new Notification('Nemesis Alerts Enabled', {
             body: 'You will be notified when predictions lock.',
             icon: 'public/favicon.png',
             tag:  'ponis-iq-notif-test',
