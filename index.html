@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nemesis</title>
+  <title>Agent Nemesis</title>
   <meta name="description" content="Nemesis is an AI-powered BTC prediction dashboard with live market context, timeframe tracking, and guided analysis." />
   <meta property="og:title" content="Nemesis | BTC Prediction Dashboard" />
   <meta property="og:description" content="Live BTC prediction context, PTB tracking, volatility, win rate, and guided AI explanations." />
@@ -128,6 +128,11 @@
     letter-spacing:0.04em; writing-mode:vertical-rl; text-orientation:mixed;
     padding-bottom:40px; margin-bottom:40px; border-bottom:1px solid var(--line);
   }
+  .logo-agent{
+    display:inline-block; font-family:var(--font-mono); font-weight:500;
+    font-size:0.45em; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--ink-faint); margin-bottom:6px;
+  }
   .nav-links{
     display:flex; flex-direction:column; gap:28px; flex:1; align-items:center;
   }
@@ -154,6 +159,7 @@
       padding:0 20px; justify-content:space-between;
     }
     .logo{ writing-mode:horizontal-tb; padding:0; margin:0; border:none; }
+    .logo-agent{ margin-bottom:0; margin-right:6px; }
     .nav-links{
       position:fixed; top:64px; left:0; right:0; flex-direction:column;
       align-items:flex-start; background:var(--panel); border-bottom:1px solid var(--line);
@@ -189,6 +195,11 @@
     font-size:clamp(64px,10vw,148px); line-height:0.88; letter-spacing:-0.02em;
     margin-bottom:24px; color:var(--ink);
   }
+  .hero-title-agent{
+    display:block; font-family:var(--font-mono); font-weight:500;
+    font-size:clamp(11px,1.4vw,15px); letter-spacing:0.32em; text-transform:uppercase;
+    color:var(--ink-faint); margin-bottom:10px;
+  }
   .hero-desc{
     max-width:480px; color:var(--ink-dim); font-size:16px; line-height:1.7; margin-bottom:36px;
   }
@@ -203,6 +214,34 @@
   .btn-ghost{ background:transparent; color:var(--ink); border-color:var(--line); }
   .btn-ghost:hover{ border-color:var(--ink); }
   .btn-lg{ padding:18px 30px; }
+
+  /* ---------- CA (contract address) placeholder bar ---------- */
+  .hero-ca{
+    display:inline-flex; align-items:center; gap:14px;
+    margin-top:28px; padding:12px 16px;
+    max-width:480px; width:100%;
+    border:1px solid var(--line); background:var(--panel);
+  }
+  .hero-ca-label{
+    font-family:var(--font-mono); font-size:10px; letter-spacing:0.18em;
+    text-transform:uppercase; color:var(--ink-faint); flex-shrink:0;
+  }
+  .hero-ca-value{
+    flex:1; min-width:0;
+    font-family:var(--font-mono); font-size:12px; color:var(--ink-dim);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .hero-ca-copy{
+    display:inline-flex; align-items:center; gap:6px; flex-shrink:0;
+    background:none; border:1px solid var(--line); color:var(--ink-dim);
+    font-family:var(--font-mono); font-size:10px; letter-spacing:0.1em; text-transform:uppercase;
+    padding:6px 10px; cursor:pointer; transition:all .2s;
+  }
+  .hero-ca-copy:hover{ border-color:var(--ink); color:var(--ink); }
+  .hero-ca-copy.copied{ border-color:var(--ink); color:var(--ink); }
+  @media (max-width:520px){
+    .hero-ca{ max-width:100%; }
+  }
 
   .hero-market-panel{
     border:1px solid var(--line); background:var(--panel);
@@ -698,12 +737,12 @@
 
   <nav class="navbar" id="navbar">
     <div class="nav-container">
-      <a href="#" class="logo">Nemesis</a>
+      <a href="#" class="logo"><span class="logo-agent">Agent</span>Nemesis</a>
       <ul class="nav-links" id="navLinks">
         <li><a href="#home">Home</a></li>
         <li><a href="#about">About</a></li>
         <li><a href="#stats">Nemesis Agent</a></li>
-        <li><a href="#kagami">Ask Nemesis</a></li>
+        <li><a href="#kagami">Ask Agent Nemesis</a></li>
         <li><a href="#faq">FAQ</a></li>
       </ul>
       <div class="nav-actions">
@@ -721,11 +760,19 @@
           <span class="hero-badge">Live BTC Intelligence</span>
           <span class="hero-topline-text">5M / 15M / 1H Prediction Desk<span class="term-cursor" aria-hidden="true"></span></span>
         </div>
-        <h1 class="hero-title">Nemesis</h1>
+        <h1 class="hero-title"><span class="hero-title-agent">Agent</span>Nemesis</h1>
         <p class="hero-desc">A premium command center for BTC prediction windows, built around live PTB, volatility, confidence, technical context, and fast AI explanations.</p>
         <div class="hero-buttons">
           <a href="#stats" class="btn btn-accent btn-lg">Open Agent</a>
-          <a href="#kagami" class="btn btn-ghost btn-lg">Ask Nemesis</a>
+          <a href="#kagami" class="btn btn-ghost btn-lg">Ask Agent Nemesis</a>
+        </div>
+        <div class="hero-ca" id="heroCa">
+          <span class="hero-ca-label">CA</span>
+          <span class="hero-ca-value" id="heroCaValue">PASTE_CONTRACT_ADDRESS_HERE</span>
+          <button class="hero-ca-copy" id="heroCaCopyBtn" type="button" aria-label="Copy contract address">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span id="heroCaCopyText">Copy</span>
+          </button>
         </div>
       </div>
       <div class="hero-market-panel" aria-label="Nemesis platform highlights">
@@ -747,7 +794,7 @@
             <p class="about-copy">Nemesis combines live price data, prediction timing, market state, and readable AI context so the dashboard is easier to act on.</p>
             <div class="about-actions">
               <a href="#stats" class="btn btn-accent">Open Agent</a>
-              <a href="#kagami" class="btn btn-ghost">Ask Nemesis</a>
+              <a href="#kagami" class="btn btn-ghost">Ask Agent Nemesis</a>
             </div>
             <div class="about-metrics">
               <div class="about-metric"><span class="about-metric-label">Primary Market</span><span class="about-metric-value">BTC</span></div>
@@ -782,7 +829,7 @@
           </article>
           <article class="about-feature-card reveal">
             <div class="feature-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div>
-            <div><h3>Guided Market Explanations</h3><p>Ask Nemesis to translate the current call, volatility, technical snapshot, and win-rate data into plain language.</p></div>
+            <div><h3>Guided Market Explanations</h3><p>Ask Agent Nemesis to translate the current call, volatility, technical snapshot, and win-rate data into plain language.</p></div>
           </article>
         </div>
       </div>
@@ -975,7 +1022,7 @@
       <div class="kagami-hero-grid">
         <div class="kagami-panel kagami-intro">
           <span class="kagami-kicker">Chat Bot</span>
-          <h2 class="kagami-title">Ask Nemesis</h2>
+          <h2 class="kagami-title">Ask Agent Nemesis</h2>
           <p class="kagami-copy">A guided BTC assistant wired to the live Nemesis dashboard. Ask about the current call, PTB, countdown, volatility, WR, or what each signal block means.</p>
           <div class="kagami-actions"><span class="kagami-badge">Live Interface</span><a class="kagami-link-btn" href="#stats">Back to Agent</a></div>
           <div class="kagami-tags"><span class="kagami-tag">Market Q&amp;A</span><span class="kagami-tag">BTC Context</span><span class="kagami-tag">Dashboard Help</span></div>
@@ -1014,7 +1061,7 @@
           <form class="kagami-compose" id="kagamiForm">
             <label class="kagami-compose-label" for="kagamiInput">Ask about the active Nemesis view</label>
             <div class="kagami-compose-row">
-              <textarea class="kagami-input" id="kagamiInput" rows="1" maxlength="240" placeholder="Ask Nemesis about the current call, PTB, volatility, WR, or technical snapshot..."></textarea>
+              <textarea class="kagami-input" id="kagamiInput" rows="1" maxlength="240" placeholder="Ask Agent Nemesis about the current call, PTB, volatility, WR, or technical snapshot..."></textarea>
               <button class="kagami-send" id="kagamiSend" type="submit">Send</button>
             </div>
           </form>
@@ -1162,7 +1209,7 @@
       <div class="faq-split">
         <div class="faq-sticky">
           <h2 class="faq-title">FAQ</h2>
-          <p class="faq-intro">Everything you need to know about Nemesis, the BTC agent, and Ask Nemesis.</p>
+          <p class="faq-intro">Everything you need to know about Nemesis, the BTC agent, and Ask Agent Nemesis.</p>
         </div>
         <div class="faq-list">
           <div class="faq-item">
@@ -1174,8 +1221,8 @@
             <div class="faq-answer"><p>Open the Nemesis Agent, choose a timeframe, and read the active call with PTB, countdown, confidence, volatility, and track-record context.</p></div>
           </div>
           <div class="faq-item">
-            <button class="faq-question"><span>What is Ask Nemesis?</span><svg class="faq-icon" viewBox="0 0 24 24" width="20" height="20"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
-            <div class="faq-answer"><p>Ask Nemesis is the guided chat layer that explains the current prediction, PTB logic, volatility, technical snapshot, and win-rate metrics in plain language.</p></div>
+            <button class="faq-question"><span>What is Ask Agent Nemesis?</span><svg class="faq-icon" viewBox="0 0 24 24" width="20" height="20"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+            <div class="faq-answer"><p>Ask Agent Nemesis is the guided chat layer that explains the current prediction, PTB logic, volatility, technical snapshot, and win-rate metrics in plain language.</p></div>
           </div>
           <div class="faq-item">
             <button class="faq-question"><span>What timeframes are supported?</span><svg class="faq-icon" viewBox="0 0 24 24" width="20" height="20"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
@@ -1194,12 +1241,12 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <a href="#" class="logo">Nemesis</a>
+          <a href="#" class="logo">Agent Nemesis</a>
           <p class="footer-tagline">AI-powered BTC market intelligence.</p>
         </div>
         <div class="footer-nav">
           <span class="footer-nav-label">Navigate</span>
-          <a href="#home">Home</a><a href="#about">About</a><a href="#stats">Nemesis Agent</a><a href="#kagami">Ask Nemesis</a><a href="#coming-soon">Markets Coming Soon</a><a href="#faq">FAQ</a>
+          <a href="#home">Home</a><a href="#about">About</a><a href="#stats">Nemesis Agent</a><a href="#kagami">Ask Agent Nemesis</a><a href="#coming-soon">Markets Coming Soon</a><a href="#faq">FAQ</a>
         </div>
         <div class="footer-social">
           <span class="footer-nav-label">Connect</span>
@@ -1230,5 +1277,46 @@
   <script src="js/agent-1h.js"></script>
   <script src="js/agent-core.js"></script>
   <script src="js/scroll.js"></script>
+
+  <script>
+  // ---------- CA (contract address) copy widget ----------
+  // Edit CONTRACT_ADDRESS below once the token is live — the display
+  // text and copy behavior both update from this single value.
+  (function(){
+    var CONTRACT_ADDRESS = "PASTE_CONTRACT_ADDRESS_HERE"; // replace with the real CA — display + copy update automatically
+
+    var valueEl = document.getElementById('heroCaValue');
+    var btn = document.getElementById('heroCaCopyBtn');
+    var label = document.getElementById('heroCaCopyText');
+    if(!btn || !valueEl || !label) return;
+
+    valueEl.textContent = CONTRACT_ADDRESS;
+    valueEl.title = CONTRACT_ADDRESS;
+
+    btn.addEventListener('click', function(){
+      var reset = function(){ btn.classList.remove('copied'); label.textContent = 'Copy'; };
+      var showCopied = function(){
+        btn.classList.add('copied');
+        label.textContent = 'Copied';
+        setTimeout(reset, 1400);
+      };
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(CONTRACT_ADDRESS).then(showCopied).catch(function(){
+          label.textContent = 'Failed';
+          setTimeout(reset, 1400);
+        });
+      } else {
+        var temp = document.createElement('textarea');
+        temp.value = CONTRACT_ADDRESS;
+        temp.style.position = 'fixed';
+        temp.style.opacity = '0';
+        document.body.appendChild(temp);
+        temp.select();
+        try { document.execCommand('copy'); showCopied(); } catch(e){ label.textContent = 'Failed'; setTimeout(reset, 1400); }
+        document.body.removeChild(temp);
+      }
+    });
+  })();
+  </script>
 </body>
 </html>
